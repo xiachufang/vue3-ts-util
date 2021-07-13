@@ -22,7 +22,7 @@ describe('Task 轮询请求辅助类', () => {
         return i
       },
       validator: r => r === 5,
-      pollInterval: 300
+      pollInterval: 100
     }
   }
 
@@ -42,14 +42,14 @@ describe('Task 轮询请求辅助类', () => {
     // 立即运行的第一个比较特殊，可以看代码
     const { completedTask, task } = Task.run({ ...shareOption(), validator: () => true })
     await completedTask
-    await delay(3 * 1000)
+    await delay(1000)
     expect(task.res).toBe(1)
   })
 
   it('验证器验证action返回的结果可用后不再运行', async () => {
     const { completedTask, task } = Task.run(shareOption())
     await completedTask
-    await delay(3 * 1000)
+    await delay(1000)
     expect(task.res).toBe(5) // 3秒内action没再运行过，结果还是5
   })
 
@@ -106,10 +106,10 @@ describe('Task 轮询请求辅助类', () => {
 
   it('手动清理后不再运行', async () => {
     const { clearTask, task } = Task.run({ ...shareOption(), validator: void 0 })
-    await delay(2 * 1000)
+    await delay(1000)
     const res1 = task.res // 记录2秒的结果
     clearTask() // 停止任务运行，预期结果不变
-    await delay(2 * 1000)
+    await delay(1000)
     expect(res1).toBe(task.res)
   })
 })

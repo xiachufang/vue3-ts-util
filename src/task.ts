@@ -1,3 +1,5 @@
+import { deepReadonly } from './readonly'
+
 interface BaseTask<T> {
   /**
    * 任务函数，支持异步
@@ -99,7 +101,7 @@ export class Task {
       asyncRunNextAction()
     }, 0)
     return {
-      task: task as Readonly<typeof task>, // task 外部不可变
+      task: deepReadonly(task), // task 外部不可变
       clearTask,
       completedTask
     }
