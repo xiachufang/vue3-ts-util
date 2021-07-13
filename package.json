@@ -1,0 +1,29 @@
+{
+  "name": "vue3-ts-util",
+  "version": "0.0.5",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "@types/moment-duration-format": "^2.2.3",
+    "@types/node": "^16.3.1",
+    "@types/ramda": "^0.27.44",
+    "ant-design-vue": "^2.2.2",
+    "ts-jest": "^27.0.3",
+    "vuex-dispatch-infer": "^0.7.3"
+  },
+  "dependencies": {
+    "moment": "^2.29.1",
+    "moment-duration-format": "^2.3.2",
+    "ramda": "^0.27.1",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0",
+    "vuex": "^4.0.0"
+  },
+  "scripts": {
+    "build": "yarn clean && tsc",
+    "clean": "rm -rf ./dist",
+    "release": "yarn build && nrm use npm && npm publish",
+    "test": "yarn jest"
+  }
+}
