@@ -1,9 +1,4 @@
-import * as momentAll from 'moment'
-import momentDurationFormatSetup from 'moment-duration-format'
-export const moment = momentAll.default
-
-momentDurationFormatSetup(momentAll)
-
+import moment from 'moment'
 /**
  * 返回一个moment实例
  */
