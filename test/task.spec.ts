@@ -1,15 +1,8 @@
 /* eslint-disable no-plusplus */
-import { Task, TaskParams, delay } from '../src'
+import { Task, TaskParams, delay, DeepReadonly, TaskInst } from '../src'
+import { ExpectError } from '../src/expectError'
 
-class ExpectError extends Error {
-  expect  = true
-  static printIfNotExpect (err: any) {
-    // console.log(err instanceof ExpectError, err.expect) false true ???
-    if (!('expect' in err)) {
-      throw err
-    }
-  }
-}
+
 
 describe('Task 轮询请求辅助类', () => {
   jest.setTimeout(10 * 1000)
@@ -71,37 +64,30 @@ describe('Task 轮询请求辅助类', () => {
 
   it('errorHandleMethod:"stop" 定义action运行时发生异常直接停止并抛异常', async () => {
     const so = shareOption()
-    let errorCount = 0
-    let runCount = 0
-    let innerTask
     /** 发生首个错误时的res */
-    let resWhenFirstError
+    let resWhenFirstError: number|undefined
+    const env = ExpectError.makeRandomErrorEnv()
+    const { completedTask, task } = Task.run({
+      ...so,
+      errorHandleMethod: 'stop',
+      action () {
+        env.try() // 有一定几率触发异常
+        return so.action()
+      }
+    })
+    env.eventEmiter.on('error', () => {
+      if (env.errorCount === 1) { // 记录首次触发时的结果
+        resWhenFirstError = task.res
+      }
+    })
     try {
-      const { completedTask, task } = Task.run({
-        ...so,
-        errorHandleMethod: 'stop',
-        action () {
-          /** 发生错误的概率 */
-          const errorProbability = [0.3, 0.5, 0.7, 1, 1][++runCount]
-          if (Math.random() < errorProbability) {
-            if (errorCount === 0) {
-              resWhenFirstError = task.res
-            }
-            errorCount += 1
-            throw new ExpectError('expect')
-          } else {
-            return so.action()
-          }
-        }
-      })
-      innerTask = task
       await completedTask
     } catch (error: unknown) {
       ExpectError.printIfNotExpect(error)
     }
-    expect(errorCount).toBe(1) // 预期有且仅有一次
-    expect(innerTask?.isFinished).toBeTruthy()
-    expect(innerTask?.res).toBe(resWhenFirstError)
+    expect(env.errorCount).toBe(1) // 预期有且仅有一次
+    expect(task.isFinished).toBeTruthy()
+    expect(task.res).toBe(resWhenFirstError)
   })
 
   it('手动清理后不再运行', async () => {

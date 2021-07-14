@@ -30,13 +30,13 @@ interface PollTask<T> extends BaseTask<T> {
 }
 
 export type TaskParams<T> = Omit<PollTask<T>, 'id'> // 去掉 PollTask 接口里面的id
+export type TaskInst<T> = PollTask<T> & { isFinished: boolean; res?: T }
 export class Task {
   /**  为true时，发生错误不打印 */
   static silent = false
 
   static run<T> (taskParams: TaskParams<T>) {
-    type TaskInst = PollTask<T> & { isFinished: boolean; res?: T }
-    const task: TaskInst = {
+    const task: TaskInst<T> = {
       immediately: true, // 默认立即执行
       id: -1,
       isFinished: false,
