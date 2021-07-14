@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-parameter-properties */
 import EventEmitter from 'events'
-import { Fn } from 'vuex-dispatch-infer'
+import type { Fn } from 'vuex-dispatch-infer'
 import { delay } from '.'
 type EventName = 'RETRIES_EXHAUESTED' | 'FETCH_QUEUE_CHANGE' | 'FETCH_QUEUE_IDLE_STATE_CHANGE'
 export class FetchTaskCancel extends Error {

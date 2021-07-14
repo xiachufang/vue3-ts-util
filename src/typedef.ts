@@ -1,6 +1,6 @@
 import { ColumnProps } from 'ant-design-vue/lib/table/interface'
 import { ActionContext } from 'vuex'
-import { Obj, Fn, ActionContextInfer } from 'vuex-dispatch-infer'
+import type { Obj, Fn, ActionContextInfer } from 'vuex-dispatch-infer'
 
 export type Columns<T> = (Omit<ColumnProps, 'customRender'> & {
     customRender?: (a: { record: T }) => any
