@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
-import { Task, TaskParams, delay, DeepReadonly, TaskInst } from '../src'
-import { ExpectError } from '../src/expectError'
+import { Task, TaskParams, delay } from '../src'
+import { ExpectError } from './expectError'
 
 
 

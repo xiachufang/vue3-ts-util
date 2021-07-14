@@ -1,4 +1,4 @@
-import { typedEventEmiter } from './eventEmiter'
+import { typedEventEmiter } from '../src/eventEmiter'
 
 
 export class ExpectError extends Error {
