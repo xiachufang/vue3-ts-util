@@ -23,6 +23,7 @@ export * from './image'
 export * from './delay'
 export * from './task'
 export * from './vuex'
+export * from './vueComponent'
 export * as R from 'ramda'
 export {
   ok
