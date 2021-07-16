@@ -1,6 +1,6 @@
 import { computed, reactive, onMounted, ref } from 'vue'
-import { makeAsyncIterator, PageCursor } from '.'
-import { deepReadonly } from './readonly'
+import { makeAsyncIterator, PageCursor } from '..'
+import { deepReadonly } from '../readonly'
 
 export const useAntdListPagination = <T extends { cursor: PageCursor }, R> (fn: (cursor: string) => Promise<T>, resp2res: (resp: T) => R, pageSize = 10, initRes = true) => {
   const { res, next, loading, cursorStack, reset } = makeAsyncIterator(fn, resp2res)

@@ -2,7 +2,7 @@
   <a-pagination @change="option.onChange" :total="option.total" :current="option.curr" @update:current="option.setCurr" :page-size="option.pageSize"/>
 </template>
 <script lang="ts">
-import { customPropType, useAntdListPagination } from '../'
+import { customPropType, useAntdListPagination } from '..'
 import { defineComponent } from 'vue'
 
 /**
