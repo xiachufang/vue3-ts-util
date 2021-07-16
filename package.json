@@ -1,6 +1,6 @@
 {
-  "name": "my-webpack-project",
-  "version": "1.0.0",
+  "name": "vue3-ts-util",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "license": "MIT",
   "devDependencies": {
