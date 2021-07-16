@@ -43,7 +43,7 @@
   "scripts": {
     "build": "yarn clean && webpack --mode=production --node-env=production",
     "clean": "rm -rf ./dist",
-    "release": "yarn build && nrm use npm && npm publish",
+    "pre-release": "yarn build && nrm use npm",
     "test": "yarn jest",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",

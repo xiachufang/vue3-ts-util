@@ -59,10 +59,10 @@ const config = {
         ],
         include: path.resolve(__dirname, 'src'),
       },
-     /* {
-        test: /\.s[ac]ss$/i,
-        use: [stylesHandler, "css-loader", "postcss-loader", "sass-loader"],
-      },*/
+      {
+         test: /\.s[ac]ss$/i,
+         use: [stylesHandler, "css-loader", "postcss-loader", "sass-loader"],
+       },
       {
         test: /\.css$/i,
         use: [stylesHandler, "css-loader", "postcss-loader"],
@@ -87,11 +87,7 @@ const config = {
     ],
   },
   resolve: {
-    alias: {
-      vue: "@vue/runtime-dom"
-    },
-    extensions: [".tsx", ".ts", ".js", ".vue"],
-    // fallback: { "assert": false }
+    extensions: [".tsx", ".ts", ".js", ".vue"]
   },
   target: 'node',
   externals: [nodeExternals()]
