@@ -41,5 +41,7 @@ jobs:
     - uses: c-hive/gha-yarn-cache@v1
     - name: 下载依赖
       run: yarn
+    - name: pre-release
+      run: yarn build #没有nrm改用build
     - name: 单元测试
       run: yarn test
