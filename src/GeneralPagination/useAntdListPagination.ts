@@ -3,7 +3,7 @@ import { makeAsyncIterator, PageCursor } from '..'
 import { deepReadonly } from '../readonly'
 
 export const useAntdListPagination = <T extends { cursor: PageCursor }, R> (fn: (cursor: string) => Promise<T>, resp2res: (resp: T) => R, pageSize = 10, initRes = true) => {
-  const { res, next, loading, cursorStack, reset } = makeAsyncIterator(fn, resp2res)
+  const { res, next, loading, cursorStack, reset: resetUpstream } = makeAsyncIterator(fn, resp2res)
   let lastCurr = 1
   const curr = ref(1)
   const setCurr = (v: number) => {
@@ -26,6 +26,10 @@ export const useAntdListPagination = <T extends { cursor: PageCursor }, R> (fn: 
     setCurr
   })
   initRes && onMounted(next)
+  const reset: typeof resetUpstream = (...args) => {
+    setCurr(1)
+    return resetUpstream(...args)
+  }
   return deepReadonly({
     pagination,
     loading,
