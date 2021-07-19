@@ -10,7 +10,6 @@
     "@types/jest": "^26.0.24",
     "@types/ramda": "^0.27.44",
     "@vue/compiler-sfc": "^3.1.4",
-    "@vue/server-renderer": "^3.1.4",
     "@webpack-cli/generators": "^2.2.0",
     "autoprefixer": "^10.3.1",
     "babel-loader": "^8.2.2",

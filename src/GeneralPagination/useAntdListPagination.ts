@@ -33,3 +33,5 @@ export const useAntdListPagination = <T extends { cursor: PageCursor }, R> (fn: 
     reset
   })
 }
+
+export type PaginationOption = ReturnType<typeof useAntdListPagination>['pagination']
