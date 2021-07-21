@@ -1,16 +1,15 @@
 import scss from "rollup-plugin-scss";
 import ts from "rollup-plugin-typescript2";
 import vue from "rollup-plugin-vue";
-import postcss from 'postcss'
+import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
 import autoExternal from "rollup-plugin-auto-external";
 import { getBabelInputPlugin } from '@rollup/plugin-babel'
+import styles from "rollup-plugin-styles";
 
 const getPlugins = (esm = true) => [
-  scss({
-    processor: () => postcss([autoprefixer()]),
-  }),
-  vue({ }),
+  vue({ preprocessStyles: true  }),
+  postcss([autoprefixer()]),
   autoExternal(),
   getBabelInputPlugin({
     include: ['src/**/*.tsx'],
