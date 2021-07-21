@@ -27,7 +27,8 @@ export const useAntdListPagination = <T extends { cursor: PageCursor }, R> (fn: 
   })
   initRes && onMounted(next)
   const reset: typeof resetUpstream = (...args) => {
-    setCurr(1)
+    lastCurr = 1
+    curr.value = 1
     return resetUpstream(...args)
   }
   return deepReadonly({
