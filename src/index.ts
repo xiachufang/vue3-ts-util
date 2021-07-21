@@ -1,4 +1,3 @@
-import { ok } from 'assert'
 export * from './eventEmiter'
 export * from './fetchQueue'
 export * from './useDomRect'
@@ -9,6 +8,7 @@ export * from './scrollIntoView'
 export * from './momentConvert'
 export * from './makeAsyncIterator'
 export * from './GeneralPagination'
+export * from './SearchSelect'
 export * from './useHeap'
 export * from './striceQuene'
 export * from './const'
@@ -24,6 +24,5 @@ export * from './delay'
 export * from './task'
 export * from './vuex'
 export * as R from 'ramda'
-export {
-  ok
-}
+export { default as SplitView } from './SplitView/index.vue'
+export { ok } from 'assert'

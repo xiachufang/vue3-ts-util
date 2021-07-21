@@ -1,16 +1,38 @@
 import scss from "rollup-plugin-scss";
 import ts from "rollup-plugin-typescript2";
 import vue from "rollup-plugin-vue";
+import postcss from 'postcss'
+import autoprefixer from 'autoprefixer'
 import autoExternal from "rollup-plugin-auto-external";
+import { getBabelInputPlugin } from '@rollup/plugin-babel'
+
+const getPlugins = (esm = true) => [
+  scss({
+    processor: () => postcss([autoprefixer()]),
+  }),
+  vue({ }),
+  autoExternal(),
+  getBabelInputPlugin({
+    include: ['src/**/*.tsx'],
+    extensions: ['.tsx'],
+    babelHelpers: 'inline',
+    plugins: ['@vue/babel-plugin-jsx'],
+    presets: [
+      '@babel/preset-typescript'
+    ]
+  }),
+  ts(esm ? {} : { tsconfigOverride: { compilerOptions: { target: "es5" } } }),
+]
+
 export default [
   {
     input: "src/index.ts",
     output: {
       dir: "es",
       format: "esm",
-      preserveModules: true,
+      preserveModules: true
     },
-    plugins: [scss(), vue(), ts(), autoExternal()],
+    plugins: getPlugins(),
   },
   {
     input: "src/index.ts",
@@ -18,11 +40,6 @@ export default [
       dir: "dist",
       format: "cjs",
     },
-    plugins: [
-      scss(),
-      vue(),
-      ts({ tsconfigOverride: { compilerOptions: { target: "es5" } } }),
-      autoExternal(),
-    ],
+    plugins: getPlugins(false),
   },
 ];
