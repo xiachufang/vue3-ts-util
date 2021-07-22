@@ -1,9 +1,11 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.3.2",
+  "version": "0.3.7",
   "main": "dist/index.js",
-  "module": "es/index.js",
+  "module": "es/src/index.js",
+  "types": "es/index.d.ts",
   "license": "MIT",
+  "sideEffects": false,
   "peerDependencies": {
     "postcss": "^8.3.5"
   },
@@ -19,7 +21,6 @@
     "@vue/babel-plugin-jsx": "^1.0.6",
     "@vue/compiler-sfc": "^3.1.4",
     "@webpack-cli/generators": "^2.2.0",
-    "autoprefixer": "^10.3.1",
     "babel-loader": "^8.2.2",
     "css-loader": "^6.0.0",
     "jest": "^27.0.6",
@@ -30,8 +31,6 @@
     "prettier": "^2.3.2",
     "rollup": "^2.53.2",
     "rollup-plugin-auto-external": "^2.0.0",
-    "rollup-plugin-postcss": "^4.0.0",
-    "rollup-plugin-scss": "^3.0.0",
     "rollup-plugin-styles": "^3.14.1",
     "rollup-plugin-typescript2": "^0.30.0",
     "rollup-plugin-vue": "^6.0.0",
