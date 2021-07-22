@@ -1,5 +1,2 @@
 export * from './useAntdListPagination'
-import GeneralPagination from './index.vue'
-export {
-  GeneralPagination
-}
+export { default as  GeneralPagination } from './index.vue'

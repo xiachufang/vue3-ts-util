@@ -1,32 +1,39 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.3.1",
+  "version": "0.3.8",
   "main": "dist/index.js",
-  "module": "es/index.js",
+  "module": "es/src/index.js",
+  "types": "es/index.d.ts",
   "license": "MIT",
+  "sideEffects": false,
+  "peerDependencies": {
+    "postcss": "^8.3.5"
+  },
   "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@babel/preset-env": "^7.14.7",
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.14.8",
+    "@babel/preset-env": "^7.14.8",
     "@babel/preset-typescript": "^7.14.5",
+    "@rollup/plugin-babel": "^5.3.0",
     "@types/jest": "^26.0.24",
     "@types/ramda": "^0.27.44",
+    "@types/rollup": "^0.54.0",
     "@types/rollup-plugin-auto-external": "^2.0.2",
+    "@vue/babel-plugin-jsx": "^1.0.6",
     "@vue/compiler-sfc": "^3.1.4",
     "@webpack-cli/generators": "^2.2.0",
-    "autoprefixer": "^10.3.1",
+    "babel-jest": "^27.0.6",
     "babel-loader": "^8.2.2",
-    "babel-plugin-external-helpers": "^6.22.0",
     "css-loader": "^6.0.0",
     "jest": "^27.0.6",
     "mini-css-extract-plugin": "^2.1.0",
     "postcss": "^8.3.5",
+    "postcss-load-config": "^3.1.0",
     "postcss-loader": "^6.1.1",
     "prettier": "^2.3.2",
     "rollup": "^2.53.2",
     "rollup-plugin-auto-external": "^2.0.0",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-scss": "^3.0.0",
+    "rollup-plugin-styles": "^3.14.1",
     "rollup-plugin-typescript2": "^0.30.0",
     "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.35.2",
@@ -38,9 +45,7 @@
     "vue-loader": "^16.3.0",
     "vuex-dispatch-infer": "^0.7.3",
     "webpack": "^5.44.0",
-    "webpack-cli": "^4.7.2",
-    "webpack-node-externals": "^3.0.0",
-    "@types/rollup": "^0.54.0"
+    "webpack-cli": "^4.7.2"
   },
   "dependencies": {
     "ant-design-vue": "^2.2.2",
@@ -52,7 +57,7 @@
   },
   "scripts": {
     "build": "yarn clean && yarn rollup -c",
-    "clean": "rm -rf ./dist ./es",
+    "clean": "rm -rf ./dist ./es bundle.css",
     "pre-release": "yarn build && nrm use npm",
     "test": "yarn jest"
   }
