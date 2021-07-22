@@ -16,7 +16,7 @@
 <script lang="ts">
 import { customPropType } from '../'
 import { computed, defineComponent, ref } from 'vue'
-import { defaultConv, useOptionsComputed } from '.'
+import { defaultConv, useOptionsComputed } from './optionsComputed'
 
 export default defineComponent({
   props: {
