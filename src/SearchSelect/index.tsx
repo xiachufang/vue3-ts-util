@@ -1,5 +1,7 @@
-import { Ref, computed, VNode } from 'vue'
-import { R } from '..'
+import R from 'ramda'
+import { VNode, Ref, computed } from 'vue'
+
+export { default as SearchSelect } from './index.vue'
 
 export type SearchSelectConv<T> = {
   key(v: T, idx: number): string | number

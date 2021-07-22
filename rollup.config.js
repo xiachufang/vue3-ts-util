@@ -12,10 +12,7 @@ const getPlugins = (esm = true) => [
     include: ['src/**/*.tsx'],
     extensions: ['.tsx'],
     babelHelpers: 'inline',
-    plugins: ['@vue/babel-plugin-jsx'],
-    presets: [
-      '@babel/preset-typescript'
-    ]
+    configFile: './babel.config.js'
   }),
   ts(esm ? {} : { tsconfigOverride: { compilerOptions: { target: "es5" } } }),
 ]
