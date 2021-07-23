@@ -1,29 +1,10 @@
-import R from 'ramda'
-import { VNode, Ref, computed } from 'vue'
-
+import { R } from '..'
+import { computed } from 'vue'
+import { Ref } from '../readonly'
+// todo 编译完类型全部丢失
 export { default as SearchSelect } from './index.vue'
-
-export type SearchSelectConv<T> = {
-  key(v: T, idx: number): string | number
-  value(v: T): string | number
-  optionText(v: T): string | number
-  text(v: T): string | number
-}
-
-export interface OptionFragment {
-  src: string
-  key: string | number
-  value: string | number
-  title: string
-  label: VNode | string | number
-  frag?: [string, string, string]
-}
-interface Props {
-  value: unknown
-  mode: 'multiple' | undefined
-  options: any[]
-  conv: SearchSelectConv<any>
-}
+import { SearchSelectConv, OptionFragment, Props } from './typedef'
+export * from './typedef'
 
 export const defaultConv: SearchSelectConv<any> = {
   key: R.identity,

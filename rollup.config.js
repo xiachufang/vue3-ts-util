@@ -9,7 +9,7 @@ const getPlugins = (esm = true) => [
   styles(),
   autoExternal(),
   getBabelInputPlugin({
-    include: ['src/**/*.tsx'],
+    include: ['src/**/*.{ts,tsx}'],
     extensions: ['.tsx'],
     babelHelpers: 'inline',
     configFile: './babel.config.js'
