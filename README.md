@@ -2,8 +2,8 @@
 vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 使用ts编写而成，组件使用模板及少量tsx。
 
-[![Node.js CI](https://github.com/xiachufang/vue3-ts-util/actions/workflows/ci.yml/badge.svg)](https://github.com/xiachufang/lanfan-dashboard/actions/workflows/ci.yml)
-![](https://img.shields.io/npm/v/vue3-ts-util.svg)
+[![Node.js CI](https://github.com/xiachufang/vue3-ts-util/actions/workflows/ci.yml/badge.svg)](https://github.com/xiachufang/vue3-ts-util/actions/workflows/ci.yml)
+[![](https://img.shields.io/npm/v/vue3-ts-util.svg)](https://www.npmjs.com/package/vue3-ts-util)
 
 
 # 用法
