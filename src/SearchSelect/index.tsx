@@ -1,4 +1,4 @@
-import { R } from '..'
+import * as R from 'ramda'
 import { computed } from 'vue'
 import { Ref } from '../readonly'
 // todo 编译完类型全部丢失

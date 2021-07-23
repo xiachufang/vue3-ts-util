@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
@@ -55,7 +55,7 @@
   "scripts": {
     "build": "yarn clean && yarn rollup -c",
     "clean": "rm -rf ./dist ./es bundle.css",
-    "pre-release": "yarn build && nrm use npm",
+    "pre-release": "yarn test && yarn build && nrm use npm",
     "test": "yarn jest"
   }
 }
