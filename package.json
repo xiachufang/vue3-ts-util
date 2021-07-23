@@ -1,19 +1,16 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.3.8",
+  "version": "0.3.12",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
   "license": "MIT",
   "sideEffects": false,
-  "peerDependencies": {
-    "postcss": "^8.3.5"
-  },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
     "@babel/preset-env": "^7.14.8",
-    "@babel/preset-typescript": "^7.14.5",
+    "@babel/preset-typescript": "^7.10.4",
     "@rollup/plugin-babel": "^5.3.0",
     "@types/jest": "^26.0.24",
     "@types/ramda": "^0.27.44",
@@ -58,7 +55,7 @@
   "scripts": {
     "build": "yarn clean && yarn rollup -c",
     "clean": "rm -rf ./dist ./es bundle.css",
-    "pre-release": "yarn build && nrm use npm",
+    "pre-release": "yarn test && yarn build && nrm use npm",
     "test": "yarn jest"
   }
 }
