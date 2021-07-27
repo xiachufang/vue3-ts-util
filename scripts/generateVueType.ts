@@ -4,7 +4,7 @@ import { execSync } from 'child_process'
 
 const fsp = fs.promises
 
-const shimeDecl = `
+const shimsDecl = `
 import { defineComponent } from 'vue'
 const Component: ReturnType<typeof defineComponent>
 export default Component
@@ -28,7 +28,7 @@ const vuefilePath2decl = (v: string) => v.replace('.vue', '.vue.d.ts')
 const main = async (startDir = 'src') => {
   // 遍历获取vue文件的路径
   const vueFiles = await getVueFile(startDir)
-  await Promise.all(vueFiles.map(path => fsp.writeFile(vuefilePath2decl(path), shimeDecl))) // 给这些vue文件创建一个临时的声明文件，能正确编译就行
+  await Promise.all(vueFiles.map(path => fsp.writeFile(vuefilePath2decl(path), shimsDecl))) // 给这些vue文件创建一个临时的声明文件，能正确编译就行
   execSync('yarn build') // 编译
   await Promise.all(vueFiles.map(async path => {
     // 读取编译好生成的类型文件，写回原来的地方
