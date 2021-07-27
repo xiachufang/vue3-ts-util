@@ -1,11 +1,13 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.3.12",
+  "version": "0.3.15",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
   "license": "MIT",
-  "sideEffects": false,
+  "sideEffects": [
+    "es/**/*.{vue,css}.js"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
@@ -38,6 +40,7 @@
     "style-loader": "^3.1.0",
     "ts-jest": "^27.0.3",
     "ts-loader": "^9.2.3",
+    "ts-node": "^10.1.0",
     "typescript": "^4.3.5",
     "vue-loader": "^16.3.0",
     "vuex-dispatch-infer": "^0.7.3",
@@ -54,8 +57,10 @@
   },
   "scripts": {
     "build": "yarn clean && yarn rollup -c",
-    "clean": "rm -rf ./dist ./es bundle.css",
-    "pre-release": "yarn test && yarn build && nrm use npm",
-    "test": "yarn jest"
+    "clean": "rm -rf ./dist ./es",
+    "import-optimization": "ts-node --project tsnode.config.json scripts/importOptimization.ts",
+    "pre-release": "yarn test && yarn build && yarn import-optimization && nrm use npm",
+    "test": "yarn jest",
+    "gen-vue-type": "ts-node --project tsnode.config.json scripts/generateVueType.ts"
   }
 }
