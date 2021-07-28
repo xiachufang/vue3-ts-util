@@ -9,6 +9,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 # 安装
 `yarn add vue3-ts-util`
 
+
 # 编译体积优化
 vue3-ts-util有两个构建版本，使用ESM构建版本可以有效的减少编译后的体积
 ## ESM构建版本
@@ -34,16 +35,33 @@ cd vue3-ts-util
 yarn 
 ....
 ```
+## 开发新功能及debug
+在scripts的文件夹下创建conf.json
+```json
+{
+  "devWatch": {
+    "symlink": "/Users/zanllp/lanfan-dashboard" // 指向你开发时所使用的项目地址
+  }
+}
+```
+```bash
+yarn dev-watch # 开启即时编译
+```
+直接在这边修改，就可以即时在那边生效
+
 ## npm scripts说明
 ### 预发行
 ```
 yarn pre-release
 ```
 再改下版本号，`npm publish`即可发包
-
+### 及时编译
+```
+deb-watch
+```
 ### import 优化
 ```
-yarn import-optimization
+yarn import-optimize
 ```
 可以在编译完的基础上进一步增强tree-shaking的效果，原理看scriprt文件夹下对应文件
 ### vue文件的类型声明文件生成

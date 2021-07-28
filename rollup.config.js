@@ -29,6 +29,7 @@ export default [
   },
   {
     input: "src/index.ts",
+    watch: false,
     output: {
       dir: "dist",
       format: "cjs",
