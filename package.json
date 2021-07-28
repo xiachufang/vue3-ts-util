@@ -58,8 +58,8 @@
   "scripts": {
     "build": "yarn clean && yarn rollup -c",
     "clean": "rm -rf ./dist ./es",
-    "import-optimization": "ts-node --project tsnode.config.json scripts/importOptimization.ts",
-    "pre-release": "yarn test && yarn build && yarn import-optimization && nrm use npm",
+    "import-optimize": "ts-node --project tsnode.config.json scripts/importOptimize.ts",
+    "pre-release": "yarn test && yarn build && yarn import-optimize && nrm use npm",
     "test": "yarn jest",
     "gen-vue-type": "ts-node --project tsnode.config.json scripts/generateVueType.ts"
   }
