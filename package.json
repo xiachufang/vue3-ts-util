@@ -16,7 +16,6 @@
     "@rollup/plugin-babel": "^5.3.0",
     "@types/jest": "^26.0.24",
     "@types/ramda": "^0.27.44",
-    "@types/rollup": "^0.54.0",
     "@types/rollup-plugin-auto-external": "^2.0.2",
     "@vue/babel-plugin-jsx": "^1.0.6",
     "@vue/compiler-sfc": "^3.1.4",
@@ -58,9 +57,10 @@
   "scripts": {
     "build": "yarn clean && yarn rollup -c",
     "clean": "rm -rf ./dist ./es",
-    "import-optimize": "ts-node --project tsnode.config.json scripts/importOptimize.ts",
+    "dev-watch": "ts-node --project tsnode.config.json scripts/index.ts --dev-watch",
+    "import-optimize": "ts-node --project tsnode.config.json scripts/index.ts --import-optimize",
     "pre-release": "yarn build && yarn import-optimize && yarn test && nrm use npm",
     "test": "yarn jest",
-    "gen-vue-type": "ts-node --project tsnode.config.json scripts/generateVueType.ts"
+    "gen-vue-type": "ts-node --project tsnode.config.json scripts/index.ts --gen-vue-type"
   }
 }

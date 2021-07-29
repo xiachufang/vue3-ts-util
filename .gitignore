@@ -2,3 +2,4 @@ dist
 es
 *.log
 node_modules
+scripts/conf.json

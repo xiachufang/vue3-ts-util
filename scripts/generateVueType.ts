@@ -25,10 +25,11 @@ const getVueFile = async (dir: string) => {
 
 const vuefilePath2decl = (v: string) => v.replace('.vue', '.vue.d.ts')
 
-const main = async (startDir = 'src') => {
+export const genVueType = async (startDir = 'src') => {
   // 遍历获取vue文件的路径
   const vueFiles = await getVueFile(startDir)
-  await Promise.all(vueFiles.map(path => fsp.writeFile(vuefilePath2decl(path), shimsDecl))) // 给这些vue文件创建一个临时的声明文件，能正确编译就行
+  // 给这些vue文件创建一个临时的声明文件，能正确编译就行
+  await Promise.all(vueFiles.map(path => fsp.writeFile(vuefilePath2decl(path), shimsDecl)))
   execSync('yarn build') // 编译
   await Promise.all(vueFiles.map(async path => {
     // 读取编译好生成的类型文件，写回原来的地方
@@ -39,13 +40,16 @@ const main = async (startDir = 'src') => {
   console.log('成功生成以下声明文件', vueFiles.map(vuefilePath2decl))
 }
 
-main().catch(err => {
-  console.error(err)
-  console.error(`
+
+const errHint = `
 生成失败
 查看是不是或者没有正确的引用，或者是被优化掉了，
 import xxx from './xxx/index.vue'
 console.log(xxx）
 是最简单的避免被优化掉的方法
-`)
-})
+`
+export const startGenVueType = () =>
+  genVueType().catch(err => {
+    console.error(err)
+    console.error(errHint)
+  })
