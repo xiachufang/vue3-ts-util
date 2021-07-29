@@ -12,6 +12,10 @@ interface DevWatchConf {
   symlink?: string
 }
 
+/**
+ * 文件修改 -> 编译打包 -> import优化 -> 复制到目标文件夹内
+ */
+
 export const devWatch = async () => {
   const confPath = 'scripts/conf.json'
   const symlink = (JSON.parse(fs.existsSync(confPath) ? fs.readFileSync(confPath).toString() : '{}')?.devWatch as DevWatchConf)?.symlink
@@ -25,7 +29,7 @@ export const devWatch = async () => {
       }
       rollup.watch(options).on('event', async e => {
         if (e.code === 'END') {
-          await importOptimize('es/src')
+          await importOptimize('es/src') // import优化在开发时对性能的提升其实是无所谓的，主要是怕优化出现问题，这样可以提现暴露
           if (symlink) { // 尝试使用符号链接，但是也出现了readme中在”ref在改变后够观测不到“的问题
             const target = path.resolve(symlink, 'node_modules', 'vue3-ts-util', 'es')
             execSync(`rm -rf ${target}`) // 先删除掉是因为 mv有已经存在的文件夹他会重新再创建一个es

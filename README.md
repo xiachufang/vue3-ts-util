@@ -40,14 +40,16 @@ yarn
 ```json
 {
   "devWatch": {
-    "symlink": "/Users/zanllp/lanfan-dashboard" // 指向你开发时所使用的项目地址
+    "symlink": "/Users/zanllp/try-fluent-design"
   }
 }
 ```
+`symlink`指向你开发&debug用的项目，再
 ```bash
 yarn dev-watch # 开启即时编译
 ```
-直接在这边修改，就可以即时在那边生效
+直接在这边修改src下面ts,tsx,vue,就可以即时在那边生效。做到近似在同一个项目内开发的体验。
+
 
 ## npm scripts说明
 ### 预发行
@@ -55,9 +57,9 @@ yarn dev-watch # 开启即时编译
 yarn pre-release
 ```
 再改下版本号，`npm publish`即可发包
-### 及时编译
+### 即时编译
 ```
-deb-watch
+dev-watch
 ```
 ### import 优化
 ```
