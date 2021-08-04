@@ -107,4 +107,12 @@ describe('FetchQueue 资源获取队列', () => {
     await queue.waitUntilEmpty()
     expect(queue.isIdle).toBe(true)
   })
+
+  it('使用cancel取消超时的任务', async () => {
+    const queue = new FetchQueue()
+    const task = queue.pushAction(delayFn(999))
+    setTimeout(() => task.cancel(), 100)
+    await expect(task.res).rejects.toThrow()
+  })
+
 })
