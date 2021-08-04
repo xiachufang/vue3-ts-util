@@ -1,0 +1,15 @@
+{
+  "split-view": {
+    "attributes": ["percent"],
+    "description": "分割视图"
+  },
+  "general-pagination": {
+    "attributes": ["option"],
+    "description": "通用分页器,和useAntdListPagination配合使用"
+  },
+  "search-select": {
+    "attributes": ["value","mode","options","conv"],
+    "description": "在antd的select的基础上进行便利性和搜索强化的选择器"
+
+  }
+}
