@@ -1,0 +1,20 @@
+{
+  "split-view/percent": {
+    "description": "分割百分比, v-model"
+  },
+  "general-pagination/option": {
+    "description": "const { pagination } = useAntdListPagination(...) <GeneralPagination option={pagination} />"
+  },
+  "search-select/value": {
+    "description": "v-model:value, 在单个模式时是值，多个时是数组"
+  },
+  "search-select/mode": {
+    "description": "指定模式，multiple（多）或者undefined（单）"
+  },
+  "search-select/options": {
+    "description": "原始的选项数组"
+  },
+  "search-select/conv": {
+    "description": "定义id,key,value,text组件如何转换，需要满足类型SearchSelectConv"
+  }
+}

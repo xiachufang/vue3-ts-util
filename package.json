@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
@@ -54,6 +54,10 @@
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",
     "vuex": "^4.0.0"
+  },
+  "vetur": {
+    "tags": "vetur/tags.json",
+    "attributes": "vetur/attributes.json"
   },
   "scripts": {
     "build": "yarn clean && yarn rollup -c",
