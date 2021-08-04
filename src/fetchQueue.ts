@@ -144,6 +144,14 @@ export class FetchQueue {
       }
     }
     actionRetryWrap()
+
+  }
+
+  /**
+   * 等待直到当前的队列为空
+   */
+  waitUntilEmpty () {
+    return Promise.all(this.queue.map(v => v.res))
   }
 
   /**

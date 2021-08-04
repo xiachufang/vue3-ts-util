@@ -1,6 +1,4 @@
-import { ref } from 'vue'
-import { FetchQueue } from '.'
-import { deepReadonly } from './readonly'
+import { FetchQueue, useFetchQueueHelper } from '.'
 
 /**
  *
@@ -8,12 +6,5 @@ import { deepReadonly } from './readonly'
  */
 export const strictQueue = (args: ConstructorParameters<typeof FetchQueue> = [1, 0, -1, 'throw']) => {
   const fetchQueue = new FetchQueue(...args)
-  const loading = ref(false)
-  fetchQueue.on('FETCH_QUEUE_IDLE_STATE_CHANGE', v => {
-    loading.value = !v
-  })
-  return deepReadonly({
-    fetchQueue,
-    loading
-  })
+  return useFetchQueueHelper(fetchQueue)
 }

@@ -1,4 +1,4 @@
-import { ref } from '@vue/reactivity'
+import { ref } from 'vue'
 import { deepReadonly } from '.'
 
 

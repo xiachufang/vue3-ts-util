@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "ant-design-vue": "^2.2.2",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "ramda": "^0.27.1",
     "vue": "^3.0.0",
