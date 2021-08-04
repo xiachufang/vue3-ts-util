@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 import { FetchQueue } from '../../src'
 
-describe('FetchQueue 资源获取队列', () => {
+describe.skip('FetchQueue 资源获取队列', () => {
   jest.setTimeout(10_000)
 
   it('指定重试次数，超出抛异常', async () => {
