@@ -3,7 +3,7 @@ import { onBeforeUnmount } from 'vue'
 /**
  * 带RAII的Object url分配
  */
-export const useHeap = () => {
+export const useStackAlloc = () => {
   const heap = new Array<string>()
   let buf = new WeakMap<any, string>()
   const alloc = (obj: any) => {
