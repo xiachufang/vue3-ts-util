@@ -68,13 +68,13 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
    * 多种资源对应的光标增长序列不一样
    * 因此为了避免传的cursor错误，在从一种资源的获取切向另外一种之前需要手动调用重置下
    */
-  const reset = (reFetch?: boolean) => {
+  const reset = async (reFetch?: boolean) => {
     ok(!loading.value)
     cursorStack.splice(0, cursorStack.length, '')
     loading.value = false
     res.value = undefined
     load.value = false
-    reFetch && next()
+    reFetch && await next()
   }
 
   const asyncIter = () => {
