@@ -132,6 +132,19 @@ const iter = makeAsyncIter(
 参考[useAntdListPagination](#useAntdListPagination)
 ### 无限滚动
 在makeAsyncIter诞生后的写的新业务里好像都没有无限滚动的场景，这里写个草稿，以后遇到了丰富下就行
+
+如果说需要在获取到的前后做一些事情，可以实现通过传一个hooks的对象
+```ts
+interface InfiniteScrollingHooks {
+    iterationPre?: () => Promise<void>
+    iterationPost?: () => Promise<void>
+}
+
+// 再
+await hooks.iterationPre?.()
+await iter.next()
+await hooks.iterationPost?.()
+```
 ```tsx
 import { reactive, nextTick, onBeforeMount, onMounted } from 'vue'
 import { PageCursor, makeAsyncIterator, ok, Ref } from '.'
@@ -185,7 +198,7 @@ export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R> (
   })
 
   /**
-   * 和useAntdListPaginatio的作用相同
+   * 和useAntdListPaginatio的reset作用相同
    */
   const reset = async (...args: Parameters<typeof iter['reset']>) => {
     data.splice(0, data.length)
@@ -216,3 +229,4 @@ const InfiniteScrollingList = defineComponent(() => {
 
 # useAntdListPagination
 useAntdListPagination是makeAsyncIter针对翻页做的一个适配，与GeneralPagation组件搭配使用，可以很容易写的出来一个翻页的组件
+

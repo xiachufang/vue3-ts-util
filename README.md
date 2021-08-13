@@ -16,7 +16,8 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
    2. [strictQueue](doc/io.md#strictQueue) 返回一个严格的请求队列，这是针对有副作用的请求而使用的
 2. [Task](doc/io.md#Task) 针对轮训请求的控制
 3. [makeAsyncIter](doc/io.md#makeAsyncIter) 将基于游标分页的请求转成异步迭代资源
-   1. [useAntdListPagination](doc/io.md#useAntdListPagination) makeAsyncIter针对翻页做的一个适配，与GeneralPagation组件搭配使用
+   1. [useAntdListPagination](doc/io.md#useAntdListPagination) makeAsyncIter针对翻页做的适配，与GeneralPagation组件搭配使用
+   2. [useInfiniteScrolling](doc/io.md#无限滚动)  makeAsyncIter针对无限滚动做的适配
 
 ## vuex相关
 # 开发
