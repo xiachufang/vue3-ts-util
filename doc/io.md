@@ -133,6 +133,10 @@ const iter = makeAsyncIter(
 ### 无限滚动
 在makeAsyncIter诞生后的写的新业务里好像都没有无限滚动的场景，这里写个草稿，以后遇到了丰富下就行
 ```tsx
+import { reactive, nextTick, onBeforeMount, onMounted } from 'vue'
+import { PageCursor, makeAsyncIterator, ok, Ref } from '.'
+
+
 export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R> (
   /**
    * 获取函数
@@ -145,53 +149,70 @@ export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R> (
   /**
    * 触发器dom
    */
-  traget: Ref<HTMLDivElement>,
+  traget: Ref<HTMLDivElement|undefined>,
   /**
-   * 监听根元素
+   * 监控根元素，没有就是document的viewport
    */
-  root?: Ref<HTMLElement>) => {
+  root?: Ref<HTMLElement|undefined>) => {
   let io: IntersectionObserver
   const data = reactive(new Array<R>())
   const iter = makeAsyncIterator(fetchFunc, resp2res)
+
   nextTick(() => {
     io = new IntersectionObserver(async ([entry]) => {
-      if (iter.loading || iter.load) { // 防止多次触发，或者加载完成
+      if (iter.loading.value || iter.load.value) { // 防止多次触发，或者加载完成
         return
       }
-      if (entry.isIntersecting && entry.intersectionRatio > 0.75) { // 交叉中，且交叉比例大于0.75
+      if (entry.isIntersecting) { // 交叉中
         ok(await iter.next()) // 等待向前迭代完成
         data.push(iter.res.value as any) // 保存本次得带结果
       }
     }, {
-      root: root?.value // 监控根元素，没有就是document
+      root: root?.value
     })
     const ele = traget.value
     ok(ele)
     io.observe(ele)
   })
-  
+
+  onMounted(async () => {
+    ok(await iter.next()) // 等待向前迭代完成
+    data.push(iter.res.value as any) // 保存本次得带结果
+  })
+
   onBeforeMount(() => {
     io && io.disconnect()
   })
+
+  /**
+   * 和useAntdListPaginatio的作用相同
+   */
+  const reset = async (...args: Parameters<typeof iter['reset']>) => {
+    data.splice(0, data.length)
+    await iter.reset(...args)
+    iter.res.value && data.push(iter.res.value as any) // 如果有获取到保存
+  }
+
   return {
     data,
-    iter
+    iter: iter as Omit<typeof iter, 'reset'>,
+    reset
   }
 }
 
 // 使用
-const InfiniteScrollingList = defineComponent({
-  setup () {
-    const triggerEle = ref<HTMLElement>() // loading菊花或者一个空的垫高元素
-    const rootEle = ref<HTMLElement>()
-    const { data, iter } = useInfiniteScrolling(fetchRes, resp => resp.recipes, triggerEle, rootEle)
-    return () => <ol ref={rootEle}>
-      {data.flat(1).map(recipe => <li key={recipe.id}> {recipe.name} </li>)}
-      {!iter.load ? <li ref={triggerEle}> loading </li> : '没有更多'}
-    </ol>
-  }
+const InfiniteScrollingList = defineComponent(() => {
+  const triggerEle = ref<HTMLElement>() // loading菊花或者一个空的垫高元素
+  const { data, iter } = useInfiniteScrolling(fetchRes, resp => resp.recipes, triggerEle)
+  return () => <ol>
+    {data.flat(1).map(recipe => <li key={recipe.id}> {recipe.name} </li>)}
+    {!iter.load.value ? <li ref={triggerEle}> loading </li> : '没有更多'}
+  </ol>
 })
 
 ```
+## demo
+![无限加载](https://user-images.githubusercontent.com/25872019/129327249-8545ba7a-0bc5-491d-8001-b20226933c7c.gif)
+
 # useAntdListPagination
 useAntdListPagination是makeAsyncIter针对翻页做的一个适配，与GeneralPagation组件搭配使用，可以很容易写的出来一个翻页的组件
