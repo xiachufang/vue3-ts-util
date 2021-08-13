@@ -8,7 +8,18 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 
 # 安装
 `yarn add vue3-ts-util`
+# 用法
+## 网络请求相关
+打开可以查看对应详细点的文档
+1. [FetchQueue](doc/io.md#FetchQueue) 请求容器，用于控制多个请求的并发，重试，意外处理，自动控制loading，可以大量减少了`try catch finally`等代码的使用
+   1. [useStrictQueueHelper](doc/io.md#strictQueue) 在FetchQueue的基础上增加了对vue的一些便利性工具
+   2. [strictQueue](doc/io.md#strictQueue) 返回一个严格的请求队列，这是针对有副作用的请求而使用的
+2. [Task](doc/io.md#Task) 针对轮训请求的控制
+3. [makeAsyncIter](doc/io.md#makeAsyncIter) 将基于游标分页的请求转成异步迭代资源
+   1. [useAntdListPagination](doc/io.md#useAntdListPagination) makeAsyncIter针对翻页做的适配，与GeneralPagation组件搭配使用
+   2. [useInfiniteScrolling](doc/io.md#无限滚动)  makeAsyncIter针对无限滚动做的适配
 
+## vuex相关
 # 开发
 ## 下载
 ```bash
@@ -76,7 +87,7 @@ const foo = () => {
 }
 ```
 3. 尽可能足够的单元测试
-4. 
+4. 如果修改了组件相关及时修改vetur下的文件
 
 
 

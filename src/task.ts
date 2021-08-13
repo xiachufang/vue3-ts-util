@@ -6,10 +6,6 @@ interface BaseTask<T> {
    */
   action: () => T | Promise<T>;
   /**
-   * 验证器为true时结束的回调
-   */
-  onCompleted?: (res: T) => void;
-  /**
    * 立即执行
    */
   immediately?: boolean;
