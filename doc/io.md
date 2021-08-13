@@ -1,4 +1,7 @@
 # FetchQueue
+请求容器，用于控制多个请求的并发，重试，意外处理，自动控制loading，可以大量减少了`try catch finally`等代码的使用
+
+
 # Task
 Task是针对轮训请求的一个封装，主要还是用于各类分析结果的轮训获取。在之前是Task还支持定时在某个时刻去执行action，后来用不到就删除了。
 
@@ -133,18 +136,6 @@ const iter = makeAsyncIter(
 ### 无限滚动
 在makeAsyncIter诞生后的写的新业务里好像都没有无限滚动的场景，这里写个草稿，以后遇到了丰富下就行
 
-如果说需要在获取到的前后做一些事情，可以实现通过传一个hooks的对象
-```ts
-interface InfiniteScrollingHooks {
-    iterationPre?: () => Promise<void>
-    iterationPost?: () => Promise<void>
-}
-
-// 再
-await hooks.iterationPre?.()
-await iter.next()
-await hooks.iterationPost?.()
-```
 ```tsx
 import { reactive, nextTick, onBeforeMount, onMounted } from 'vue'
 import { PageCursor, makeAsyncIterator, ok, Ref } from '.'
@@ -224,8 +215,25 @@ const InfiniteScrollingList = defineComponent(() => {
 })
 
 ```
+
 ## demo
 ![无限加载](https://user-images.githubusercontent.com/25872019/129327249-8545ba7a-0bc5-491d-8001-b20226933c7c.gif)
+
+## hooks
+
+如果说需要在获取到的前后做一些事情，可以实现通过传一个hooks的对象
+```ts
+interface InfiniteScrollingHooks {
+    iterationPre?: () => Promise<void>
+    iterationPost?: () => Promise<void>
+}
+
+// 再
+await hooks.iterationPre?.()
+await iter.next()
+await hooks.iterationPost?.()
+```
+
 
 # useAntdListPagination
 useAntdListPagination是makeAsyncIter针对翻页做的一个适配，与GeneralPagation组件搭配使用，可以很容易写的出来一个翻页的组件
