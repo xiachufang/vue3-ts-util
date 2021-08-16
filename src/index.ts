@@ -1,4 +1,4 @@
-export * from './eventEmiter'
+export * from './events'
 export * from './fetchQueue'
 export * from './useDomRect'
 export * from './useWatchDocument'

@@ -1,4 +1,4 @@
-import { typedEventEmiter } from '../src/eventEmiter'
+import { typedEventEmitter } from '../src'
 
 
 export class ExpectError extends Error {
@@ -14,12 +14,12 @@ export class ExpectError extends Error {
    return {
       runCount: 0,
       errorCount: 0,
-      ...typedEventEmiter<{ error: number }>(),
+      ...typedEventEmitter<{ error: number }>(),
       try () {
         const currProbability = errorProbability[++this.runCount]
         if (Math.random() < currProbability) {
           this.errorCount++
-          this.eventEmiter.emit('error', this.errorCount)
+          this.eventEmitter.emit('error', this.errorCount)
           throw new ExpectError()
         }
       }
