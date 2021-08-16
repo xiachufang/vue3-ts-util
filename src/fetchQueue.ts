@@ -69,9 +69,9 @@ export class FetchQueue {
 
   }
 
-  private static eventEmiter = new EventEmitter()
+  private static eventEmitter = new EventEmitter()
 
-  private eventEmiter = new EventEmitter()
+  private eventEmitter = new EventEmitter()
 
   private queue: FetchQueueInternal = []
 
@@ -88,7 +88,7 @@ export class FetchQueue {
    * 提醒队列发生变化
    */
   private noticeChange () {
-    this.eventEmiter.emit('FETCH_QUEUE_CHANGE', this.queue)
+    this.eventEmitter.emit('FETCH_QUEUE_CHANGE', this.queue)
   }
 
   private lastIdleState = true
@@ -101,7 +101,7 @@ export class FetchQueue {
       return
     }
     this.lastIdleState = this.isIdle
-    this.eventEmiter.emit('FETCH_QUEUE_IDLE_STATE_CHANGE', this.isIdle)
+    this.eventEmitter.emit('FETCH_QUEUE_IDLE_STATE_CHANGE', this.isIdle)
   }
 
   /**
@@ -158,22 +158,22 @@ export class FetchQueue {
    * 添加队监听器
    */
   on (name: EventName, cb: Fn) {
-    this.eventEmiter.on(name, cb)
+    this.eventEmitter.on(name, cb)
   }
 
   /**
    * 添加全局监听器
    */
   static on (name: EventName, cb: (target: FetchQueue, ...args: any[]) => any) {
-    FetchQueue.eventEmiter.on(name, cb)
+    FetchQueue.eventEmitter.on(name, cb)
   }
 
   /**
    * 添加队监听器
    */
   private emit (name: EventName, ...args: any[]) {
-    this.eventEmiter.emit(name, ...args)
-    FetchQueue.eventEmiter.emit(name, this, ...args)
+    this.eventEmitter.emit(name, ...args)
+    FetchQueue.eventEmitter.emit(name, this, ...args)
   }
 
   /**

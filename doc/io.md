@@ -191,7 +191,7 @@ export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R> (
   /**
    * 和useAntdListPaginatio的reset作用相同
    */
-  const reset = async (...args: Parameters<typeof iter['reset']>) => {
+  const reset: typeof iter['reset'] = async (...args) => {
     data.splice(0, data.length)
     await iter.reset(...args)
     iter.res.value && data.push(iter.res.value as any) // 如果有获取到保存

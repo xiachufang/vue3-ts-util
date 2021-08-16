@@ -5,7 +5,7 @@ import { onBeforeUnmount } from 'vue'
  * TypeStrong 的EventEmitter
  */
 
-export type TypedEventEmiter<EventKV extends Record<string, any>, Keys extends keyof EventKV = keyof EventKV> =
+export type TypedEventEmitter<EventKV extends Record<string, any>, Keys extends keyof EventKV = keyof EventKV> =
   Omit<EventEmitter, 'once' | 'on' | 'off' | 'emit' | 'removeAllListeners'> & ({
     once<K extends Keys> (k: K, fn: (v: EventKV[K]) => void): void
     on<K extends Keys> (k: K, fn: (v: EventKV[K]) => void): void
@@ -14,20 +14,20 @@ export type TypedEventEmiter<EventKV extends Record<string, any>, Keys extends k
     removeAllListeners (k?: Keys): void
   })
 
-export const typedEventEmiter = <EventKV extends Record<string, any>> () => {
+export const typedEventEmitter = <EventKV extends Record<string, any>> () => {
   type Keys = keyof EventKV
-  const eventEmiter = new EventEmitter() as TypedEventEmiter<EventKV>
+  const eventEmitter = new EventEmitter() as TypedEventEmitter<EventKV>
 
   /**
    * 带RAII的事件监听
    */
   const useEventListen = <K extends Keys> (e: K, fn: (v: EventKV[K]) => any) => {
-    eventEmiter.on(e, fn)
-    onBeforeUnmount(() => eventEmiter.off(e, fn))
+    eventEmitter.on(e, fn)
+    onBeforeUnmount(() => eventEmitter.off(e, fn))
   }
 
   return {
-    eventEmiter,
+    eventEmitter,
     useEventListen
   }
 }

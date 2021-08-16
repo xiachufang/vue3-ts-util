@@ -75,7 +75,7 @@ describe('Task 轮询请求辅助类', () => {
         return so.action()
       }
     })
-    env.eventEmiter.on('error', () => {
+    env.eventEmitter.on('error', () => {
       if (env.errorCount === 1) { // 记录首次触发时的结果
         resWhenFirstError = task.res
       }
