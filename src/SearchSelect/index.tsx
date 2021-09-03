@@ -3,31 +3,26 @@ import { computed } from 'vue'
 import { Ref } from '../readonly'
 // todo 编译完类型全部丢失
 export { default as SearchSelect } from './index.vue'
-import { SearchSelectConv, OptionFragment, Props } from './typedef'
+import { OptionFragment, Props } from './typedef'
 export * from './typedef'
-
-export const defaultConv: SearchSelectConv<any> = {
-  key: R.identity,
-  value: R.identity,
-  optionText: R.identity,
-  text: R.identity
-}
 
 export const useOptionsComputed = (props: Props, searchTarget: Ref<string>) => {
   const currOptions = computed(() => {
     const { options, conv } = props
+    const key = conv.key ?? conv.value
+    const optionText = conv.optionText ?? conv.text
     if (!searchTarget.value) {
       return options.map<OptionFragment>((op, idx) => ({
         src: op,
-        key: conv.key(op, idx),
-        label: conv.optionText(op).toString(),
+        key: key(op, idx),
+        label: optionText(op).toString(),
         title: conv.text(op).toString(),
         value: conv.value(op)
       }))
     }
     return options
       .reduce<OptionFragment[]>((p, c, cIdx) => {
-      const srcText = conv.optionText(c).toString()
+      const srcText = optionText(c).toString()
       const idx = srcText
         .toLowerCase()
         .indexOf(searchTarget.value.toLowerCase()) // 无视大小写，速度比比正则式快
@@ -41,7 +36,7 @@ export const useOptionsComputed = (props: Props, searchTarget: Ref<string>) => {
         p.push({
           frag,
           src: c,
-          key: conv.key(c, cIdx),
+          key: key(c, cIdx),
           title: conv.text(c).toString(),
           label: (
             <div>

@@ -1,23 +1,36 @@
-import { VNode } from 'vue'
+import type { VNode } from 'vue'
+
+type StrOrNum = string | number
 
 export type SearchSelectConv<T> = {
-  key(v: T, idx: number): string | number
-  value(v: T): string | number
-  optionText(v: T): string | number
-  text(v: T): string | number
+  /**
+   * v-for的key，不传默认使用value
+   */
+  key?: (v: T, idx: number) => StrOrNum
+  /**
+   * v-model的值
+   */
+  value(v: T): StrOrNum
+  /**
+   * 选项显示的文本,不填默认使用text
+   */
+  optionText?: (v: T) => StrOrNum
+  /**
+   * 回填时显示的文本
+   */
+  text(v: T): StrOrNum
 }
 
 export interface OptionFragment {
   src: string
-  key: string | number
-  value: string | number
+  key: StrOrNum
+  value: StrOrNum
   title: string
-  label: VNode | string | number
+  label: VNode | StrOrNum
   frag?: [string, string, string]
 }
 export interface Props {
   value: unknown
-  mode: 'multiple' | undefined
   options: any[]
   conv: SearchSelectConv<any>
 }
