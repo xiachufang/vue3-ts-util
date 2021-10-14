@@ -1,4 +1,4 @@
-import { ColumnProps } from 'ant-design-vue/lib/table/interface'
+import type { ColumnProps } from './typedef'
 
 /**
  * 生成antd表格列的主键

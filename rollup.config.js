@@ -11,7 +11,7 @@ const getPlugins = (esm = true) => [
   getBabelInputPlugin({
     include: ['src/**/*.{ts,tsx}'],
     extensions: ['.tsx'],
-    babelHelpers: 'inline',
+    babelHelpers: 'runtime',
     configFile: './babel.config.js'
   }),
   ts(esm ? {} : { tsconfigOverride: { compilerOptions: { target: "es5" } } }),

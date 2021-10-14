@@ -1,13 +1,28 @@
-import { ColumnProps } from 'ant-design-vue/lib/table/interface'
-import { ActionContext } from 'vuex'
+import type { VNode } from 'vue'
+import type { ActionContext } from 'vuex'
 import type { Obj, Fn, ActionContextInfer } from 'vuex-dispatch-infer'
 
-export type Columns<T> = (Omit<ColumnProps, 'customRender'> & {
+export interface ColumnProps {
+    title: VNode;
+    key: string | number
+    align: "left" | "right" | "center"
+    ellipsis: boolean
+    sorter: any
+    defaultSortOrder: "descend" | "ascend"
+    colSpan: number;
+    width: string | number
+    fixed: boolean | "left" | "right"
+    sortOrder: boolean | "descend" | "ascend"
+    dataIndex: string
+    slots: {
+      customRender: string
+    }
+};
+
+
+export type Columns<T> = (Partial<ColumnProps> & {
   customRender?: (a: { record: T }) => any
-  dataIndex?: keyof T,
-  slots?: {
-    customRender: string
-  }
+  dataIndex?: keyof T
 })[]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

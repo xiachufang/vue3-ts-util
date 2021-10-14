@@ -4,6 +4,7 @@ module.exports = {
     '@babel/preset-typescript'
   ],
   plugins: [
-    '@vue/babel-plugin-jsx'
+    '@vue/babel-plugin-jsx',
+    '@babel/transform-runtime'
   ]
 };
