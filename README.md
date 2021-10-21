@@ -33,7 +33,7 @@ yarn
 ```json
 {
   "devWatch": {
-    "symlink": "/Users/zanllp/try-fluent-design"
+    "symlink": "/Users/zanllp/try-fluent-design" // 直接在命令行里输入pwd获取
   }
 }
 ```
@@ -75,19 +75,10 @@ yarn clean
 ```
 yarn test
 ```
-## 在开发时需要遵守
+## 一些需要注意的地方
 1. vue组件的类型声明应该使用`yarn gen-vue-type`来自动生成，而不是手写或者使用shims,使用shims会丢失props的类型信息。对于props的声明应该尽量`customPropType`，可以尽可能接近写interface的体验
-2. 对于外部不可变的值(例如`strictQueue的loading`)应该对返回值加`deepReadonly`,可以对这类ref做到类型层面的只读，更狠一点可以
-```ts
-const foo = () => {
-    const loading = ref(true)
-    return {
-        bar: computed(() => loading.value)
-    }
-}
-```
-3. 尽可能足够的单元测试
-4. 如果修改了组件相关及时修改vetur下的文件
+2. 尽可能足够的单元测试
+3. 如果修改了组件相关及时修改vetur下的文件，及volar所使用的`src/globalComponents.ts`
 
 
 
