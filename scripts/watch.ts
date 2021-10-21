@@ -28,6 +28,9 @@ export const devWatch = async () => {
         await Promise.all(optionsObj.output.map(bundle.write))
       }
       rollup.watch(options).on('event', async e => {
+        if (e.code === 'ERROR') {
+          console.error(e.error);
+        }
         if (e.code === 'END') {
           await importOptimize('es/src') // import优化在开发时对性能的提升其实是无所谓的，主要是怕优化出现问题，这样可以提现暴露
           if (symlink) { // 尝试使用符号链接，但是也出现了readme中在”ref在改变后够观测不到“的问题

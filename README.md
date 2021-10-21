@@ -77,8 +77,9 @@ yarn test
 ```
 ## 一些需要注意的地方
 1. vue组件的类型声明应该使用`yarn gen-vue-type`来自动生成，而不是手写或者使用shims,使用shims会丢失props的类型信息。对于props的声明应该尽量`customPropType`，可以尽可能接近写interface的体验
-2. 尽可能足够的单元测试
-3. 如果修改了组件相关及时修改vetur下的文件，及volar所使用的`src/globalComponents.ts`
+2. 如果需要返回一个外部不可修改的对象可以使用`deepReadonly`
+3. 尽可能足够的单元测试
+4. 如果修改了组件相关及时修改vetur下的文件，及volar所使用的`src/globalComponents.ts`
 
 
 
