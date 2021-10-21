@@ -89,18 +89,16 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
     }
   }
 
-  return {
-    ...deepReadonly({
-      load,
-      next,
-      res,
-      loading,
-      cursorStack,
-      reset
-    }),
-    [Symbol.asyncIterator]: asyncIter, // deepReadonly不支持异步迭代器，单独写
+  return deepReadonly({
+    load,
+    next,
+    res,
+    loading,
+    cursorStack,
+    reset,
+    [Symbol.asyncIterator]: asyncIter,
     iter: {
       [Symbol.asyncIterator]: asyncIter
     }
-  }
+  })
 }

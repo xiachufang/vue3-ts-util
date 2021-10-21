@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-parameter-properties */
 import EventEmitter from 'events'
 import type { Fn } from 'vuex-dispatch-infer'
-import { delay } from '.'
+import { deepReadonly, delay } from '.'
 type EventName = 'RETRIES_EXHAUESTED' | 'FETCH_QUEUE_CHANGE' | 'FETCH_QUEUE_IDLE_STATE_CHANGE'
 export class FetchTaskCancel extends Error {
 
@@ -81,7 +81,7 @@ export class FetchQueue {
 
   get conf () {
     const { maxConcurrencyCount, maxRetryCount, retryInterval, errorHandleMethod } = this
-    return { maxConcurrencyCount, maxRetryCount, retryInterval, errorHandleMethod }
+    return deepReadonly({ maxConcurrencyCount, maxRetryCount, retryInterval, errorHandleMethod })
   }
 
   /**
@@ -213,6 +213,6 @@ export class FetchQueue {
     this.queue.push(task)
     this.noticeChange()
     this.tryRunNext() // 尝试运行刚才压入的任务
-    return task
+    return deepReadonly(task)
   }
 }

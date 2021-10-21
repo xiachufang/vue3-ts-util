@@ -6,8 +6,10 @@ export const useFetchQueueHelper = (fetchQueue: FetchQueue) => {
   fetchQueue.on('FETCH_QUEUE_IDLE_STATE_CHANGE', v => {
     loading.value = !v
   })
-  return deepReadonly({
-    loading,
-    fetchQueue
-  })
+  return {
+    fetchQueue,
+    ...deepReadonly({
+      loading,
+    })
+  }
 }

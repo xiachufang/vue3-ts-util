@@ -96,10 +96,10 @@ export class Task {
       task.immediately && await runAction()
       asyncRunNextAction()
     }, 0)
-    return {
-      task: deepReadonly(task), // task 外部不可变
+    return deepReadonly({
+      task, // task 外部不可变
       clearTask,
       completedTask
-    }
+    })
   }
 }
