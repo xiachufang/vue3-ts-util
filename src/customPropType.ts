@@ -14,7 +14,7 @@ import { PropType } from 'vue'
  */
 export function customPropType<T> (required?: true, type?: PropType<T>): { type: PropType<T>; required: true }
 export function customPropType<T> (required: boolean, type?: PropType<T>): { type: PropType<T> }
-export function customPropType<T> (factory: () => T): { type: PropType<T>; required: true }
+export function customPropType<T> (factory: () => T): { default: T }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function customPropType (arg0: any = true, type?: any) {
   const res: any = {
