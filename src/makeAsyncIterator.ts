@@ -10,7 +10,8 @@ import { deepReadonly } from './readonly'
  * @param resp2res 响应体转获取额资源
  * @returns 。。。
  */
-export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch: (cursor: string) => Promise<T>, resp2res: (resp: T) => R) => {
+export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch: (cursor: string) => Promise<T>, resp2res: (resp: T) => R,
+  { dataUpdateStrategy = 'replace' }: { dataUpdateStrategy?: 'merge' | 'replace' } = {}) => {
   const cursorStack = reactive<string[]>([''])
   /**
    * 所有资源加载完成
@@ -24,6 +25,17 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
    * 加载中
    */
   const loading = ref(false)
+
+
+  const updateRes = (newVal: R) => {
+    if (dataUpdateStrategy === 'replace') {
+      res.value = newVal
+    } else if (dataUpdateStrategy === 'merge') {
+      ok((Array.isArray(res.value) || typeof res.value === 'undefined') && Array.isArray(newVal), '数据更新策略为合并时仅可用于值为数组的情况')
+      res.value = [...(res?.value ?? []), ...newVal] as any
+    }
+  }
+
   /**
    * 资源获取迭代到下一页，或者是指定页
    * @param idx 指定页 0开始，默认下一页
@@ -46,7 +58,7 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
         nextCursorStr = cursorStack[cursorStack.length - 1]
       }
       const resp = await resFetch(nextCursorStr)
-      res.value = resp2res(resp)
+      updateRes(resp2res(resp))
       const newCursor = resp.cursor
       if (idx === cursorStack.length - 1 || typeof idx !== 'number') { // 在最后一页向前时，光标栈才压入
         load.value = !newCursor.has_next

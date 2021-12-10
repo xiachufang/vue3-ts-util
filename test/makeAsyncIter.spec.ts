@@ -18,6 +18,17 @@ describe('makeAsyncIterator', () => {
     expect(res.value).toBe(2) // 值不变
   })
 
+  it('支持数组类型的数据合并', async () => {
+    const { fetchRes } = pagedResourceTestEnv(3, 10, 'array') // 创建一个3页的mock资源
+    const { res, next } = makeAsyncIterator(fetchRes, resp => resp.val, { dataUpdateStrategy: 'merge' })
+    await next()
+    expect(res.value!.length).toBe(1)
+    await next()
+    expect(res.value!.length).toBe(2)
+     await next()
+    expect(res.value!.length).toBe(3)
+  })
+
   it('迭代中loading状态改变且互斥', async () => {
     const { fetchRes } = pagedResourceTestEnv(3, 100) // 创建一个3页的mock资源
     const { next, loading } = makeAsyncIterator(fetchRes, resp => resp.val)
