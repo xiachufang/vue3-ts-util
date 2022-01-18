@@ -1,17 +1,42 @@
+import { number } from 'vue-types'
 import { delay, PageCursor } from '../src'
+
+interface MockRes<T> {
+  cursor: PageCursor
+  val: T
+  curr: string
+}
+
+interface FetchRes<T> {
+  (cursor: string): Promise<{
+    cursor: PageCursor
+    val: T
+    curr: string
+  }>
+}
+interface Res<T> {
+  fetchRes: FetchRes<T>
+  mockRes: MockRes<T>
+}
+
+interface PagedResourceTestEnv {
+  (length?:number, delayTime?:number, type?: 'number'): Res<number>
+  (length: number, delayTime:number, type: 'array'): Res<number[]>
+}
+
 
 /**
  * 分页资源测试环境，所有的测试环境都应该使用纯函数写，确保无副作用
  */
- export const pagedResourceTestEnv = (length = 10, delayTime = 0) => {
+export const pagedResourceTestEnv: PagedResourceTestEnv = (length = 10, delayTime = 0, type = 'number') => {
   const createResource = (length: number) => {
     const curs = ['']
-    return Array.from({ length }).map<{ cursor: PageCursor, val: number, curr: string }>((_, i) => {
+    return Array.from({ length }).map((_, i) => {
       if (i !== length - 1) {
         curs.push((Math.random() * 10000).toPrecision(4))
       }
       return {
-        val: i,
+        val: type === 'array' ? [i] : i,
         curr: curs[i],
         cursor: {
           has_next: i !== length - 1,
@@ -36,5 +61,5 @@ import { delay, PageCursor } from '../src'
   return {
     fetchRes,
     mockRes
-  }
+  } as any
 }
