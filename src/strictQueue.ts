@@ -12,3 +12,4 @@ export const strictQueue = (args: ConstructorParameters<typeof FetchQueue> = [1,
     fetchQueue: FetchQueue
   } // 编译时好像有点问题手动指定
 }
+export const useStrictQueue = strictQueue
