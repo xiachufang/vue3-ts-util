@@ -20,6 +20,8 @@ type InfiniteScrollingIntersectionOptions = {
 
 export type InfiniteScrollingOptions = InfiniteScrollingReachBottomOptions | InfiniteScrollingIntersectionOptions
 
+const isElement = (el: any): el is Element => typeof el?.tagName === 'string'
+
 export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R extends any[]>
   (resFetch: (cursor: string) => Promise<T>, resp2res: (resp: T) => R, opt: InfiniteScrollingOptions) => {
   const iter = makeAsyncIterator(resFetch, resp2res, { dataUpdateStrategy: 'merge' })
@@ -60,8 +62,8 @@ export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R extends
      * 用于进行动态添加监视目标
      */
     obverse (ref: Element | ComponentInternalInstance | null) {
-      if ((ref as any)?.tagName) {
-        io?.observe(ref as Element)
+      if (isElement(ref)) {
+        io?.observe(ref)
       }
     }
   }
