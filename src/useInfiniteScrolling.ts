@@ -61,7 +61,7 @@ export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R extends
     /**
      * 用于进行动态添加监视目标
      */
-    obverse (ref: Element | ComponentInternalInstance | null) {
+    observe (ref: Element | ComponentInternalInstance | null) {
       if (isElement(ref)) {
         io?.observe(ref)
       }
