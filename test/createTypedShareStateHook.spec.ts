@@ -14,7 +14,7 @@ const render = () => h('div')
 
 describe('createTypedShareStateHook', () => {
 
-  it('修改hook后会变化', () => {
+  it('修改后实例内状态会变化', () => {
     let count = -1
     createApp(defineComponent({
       render,
@@ -27,7 +27,7 @@ describe('createTypedShareStateHook', () => {
      expect(count).toBe(1)
   })
 
-  it('修改hook后会变化(refs形式) & 不同实例之间互不干扰', () => {
+  it('修改后实例内状态会变化(refs形式) & 不同实例之间互不干扰', () => {
     let count = -1
     createApp(defineComponent({
       render,
