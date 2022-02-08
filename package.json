@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.3.29",
+  "version": "0.3.30",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
@@ -47,7 +47,7 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
-    "ant-design-vue": "^2.2.2",
+    "ant-design-vue": "^2.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "ramda": "^0.27.1",

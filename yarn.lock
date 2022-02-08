@@ -1816,10 +1816,10 @@ ansi-styles@^5.0.0:
   resolved "https://registry.npmjs.org/ansi-styles/-/ansi-styles-5.2.0.tgz#07449690ad45777d1924ac2abb2fc8895dba836b"
   integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
 
-ant-design-vue@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.npmjs.org/ant-design-vue/-/ant-design-vue-2.2.2.tgz#197388583c4e0b8ccd9c50ed19831ede27c2b919"
-  integrity sha512-Gmed9dVw4oqYmuO3ubkXbRBadldE82XSt6Gqq3F2grvORKXYoJF/3CaMwfyRN81UaoRhWVTHmLeGLzuVpwJepw==
+ant-design-vue@^2:
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/ant-design-vue/-/ant-design-vue-2.2.8.tgz#fa87cf6842d8ee9a0d8af393ff4099ecc4072f2b"
+  integrity sha512-3graq9/gCfJQs6hznrHV6sa9oDmk/D1H3Oo0vLdVpPS/I61fZPk8NEyNKCHpNA6fT2cx6xx9U3QS63uuyikg/Q==
   dependencies:
     "@ant-design/icons-vue" "^6.0.0"
     "@babel/runtime" "^7.10.5"
@@ -1832,6 +1832,7 @@ ant-design-vue@^2.2.2:
     lodash-es "^4.17.15"
     moment "^2.27.0"
     omit.js "^2.0.0"
+    resize-observer-polyfill "^1.5.1"
     scroll-into-view-if-needed "^2.2.25"
     shallow-equal "^1.0.0"
     vue-types "^3.0.0"
@@ -6213,6 +6214,11 @@ require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
   integrity sha1-jGStX9MNqxyXbiNE/+f3kqam30I=
+
+resize-observer-polyfill@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-cwd@^3.0.0:
   version "3.0.0"
