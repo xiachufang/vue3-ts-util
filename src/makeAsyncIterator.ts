@@ -8,7 +8,7 @@ import { deepReadonly } from './readonly'
  * 分页资源获取,不需要手动管理cursor的迭代
  * @param fn 资源获取函数
  * @param resp2res 响应体转获取额资源
- * @returns 。。。
+ * @returns
  */
 export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch: (cursor: string) => Promise<T>, resp2res: (resp: T) => R,
   { dataUpdateStrategy = 'replace' }: { dataUpdateStrategy?: 'merge' | 'replace' } = {}) => {
