@@ -4,25 +4,25 @@ interface BaseTask<T> {
   /**
    * 任务函数，支持异步
    */
-  action: () => T | Promise<T>;
+  action: () => T | Promise<T>
   /**
    * 立即执行
    */
-  immediately?: boolean;
-  id?: number;
+  immediately?: boolean
+  id?: number
   /**
    * 验证器，action结束后调用，为true时结束当前任务
    */
-  validator?: (r: T) => boolean;
+  validator?: (r: T) => boolean
 
-  errorHandleMethod? : 'stop'|'ignore';
+  errorHandleMethod?: 'stop' | 'ignore'
 }
 
 interface PollTask<T> extends BaseTask<T> {
   /**
    * 轮询间隔
    */
-  pollInterval: number;
+  pollInterval: number
 }
 
 export type TaskParams<T> = Omit<PollTask<T>, 'id'> // 去掉 PollTask 接口里面的id
@@ -62,7 +62,7 @@ export class Task {
     }
     const runAction = async () => {
       try {
-      // eslint-disable-next-line require-atomic-updates
+        // eslint-disable-next-line require-atomic-updates
         task.res = await task.action()
         // 没有验证器时认为会手动调用clearTask
         if (task.validator && task.validator(task.res)) {
