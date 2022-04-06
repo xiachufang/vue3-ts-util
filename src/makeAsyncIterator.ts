@@ -2,11 +2,17 @@ import { PageCursor } from './typedef'
 import { reactive, ref } from 'vue'
 import { ok } from '.'
 import { deepReadonly } from './readonly'
+import { assigIncrId } from './incrId'
+
+export type ResetParams = {
+  refetch?: boolean
+  force?: boolean
+}
 
 /**
  * 创建异步迭代器
  * 分页资源获取,不需要手动管理cursor的迭代
- * @param fn 资源获取函数
+ * @param resFetch 资源获取函数
  * @param resp2res 响应体转获取额资源
  * @returns
  */
@@ -26,6 +32,9 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
    */
   const loading = ref(false)
 
+  let currActionId = ref(-1)
+
+  const abortActions = new Set<number>()
 
   const updateRes = (newVal: R) => {
     if (dataUpdateStrategy === 'replace') {
@@ -47,8 +56,10 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
       return false
     }
     loading.value = true
+    const thisActionId = assigIncrId()
     try {
-      let nextCursorStr
+      currActionId.value = thisActionId // 标记当前正在运行的是哪个action
+      let nextCursorStr: string
       if (typeof idx === 'number') {
         nextCursorStr = cursorStack[idx]
         if (typeof nextCursorStr !== 'string') {
@@ -58,6 +69,10 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
         nextCursorStr = cursorStack[cursorStack.length - 1]
       }
       const resp = await resFetch(nextCursorStr)
+      if (abortActions.has(thisActionId)) {
+        abortActions.delete(thisActionId)
+        return false
+      }
       updateRes(resp2res(resp))
       const newCursor = resp.cursor
       if (idx === cursorStack.length - 1 || typeof idx !== 'number') { // 在最后一页向前时，光标栈才压入
@@ -69,10 +84,21 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
         }
       }
     } finally {
-      loading.value = false
+      if (currActionId.value === thisActionId) { // 当不一致时，说明被中断掉了，不进行操作
+        loading.value = false
+      }
     }
     return true
   }
+
+  /**
+   * 中断当前的迭代操作
+   */
+  const abort = () => {
+    abortActions.add(currActionId.value)
+    loading.value = false
+  }
+
   /**
    * 重置当前的资源管理
    *
@@ -80,13 +106,18 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
    * 多种资源对应的光标增长序列不一样
    * 因此为了避免传的cursor错误，在从一种资源的获取切向另外一种之前需要手动调用重置下
    */
-  const reset = async (reFetch?: boolean) => {
-    ok(!loading.value)
+  const reset = async (params: ResetParams | boolean = false) => {
+    const { refetch, force } = typeof params === 'object' ? params : <ResetParams>{ refetch: params }
+    if (force) {
+      abort()
+    } else {
+      ok(!loading.value)
+    }
     cursorStack.splice(0, cursorStack.length, '')
     loading.value = false
     res.value = undefined
     load.value = false
-    reFetch && await next()
+    refetch && await next()
   }
 
   const asyncIter = () => {
@@ -102,6 +133,7 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
   }
 
   return deepReadonly({
+    abort,
     load,
     next,
     res,
