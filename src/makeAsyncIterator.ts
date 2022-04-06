@@ -5,7 +5,13 @@ import { deepReadonly } from './readonly'
 import { assigIncrId } from './incrId'
 
 export type ResetParams = {
+  /**
+   *重置后重新获取一次
+   */
   refetch?: boolean
+  /**
+   * 强制进行重置，会中断掉当前正在进行的迭代操作如果有的话
+   */
   force?: boolean
 }
 
@@ -57,8 +63,8 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
     }
     loading.value = true
     const thisActionId = assigIncrId()
+    currActionId.value = thisActionId // 标记当前正在运行的是哪个action
     try {
-      currActionId.value = thisActionId // 标记当前正在运行的是哪个action
       let nextCursorStr: string
       if (typeof idx === 'number') {
         nextCursorStr = cursorStack[idx]
@@ -110,9 +116,8 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
     const { refetch, force } = typeof params === 'object' ? params : <ResetParams>{ refetch: params }
     if (force) {
       abort()
-    } else {
-      ok(!loading.value)
     }
+    ok(!loading.value)
     cursorStack.splice(0, cursorStack.length, '')
     loading.value = false
     res.value = undefined
@@ -123,10 +128,12 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
   const asyncIter = () => {
     return {
       next: async () => {
-        await next()
+        if (loading.value) {
+          throw new Error('不允许同时迭代')
+        }
         return {
-          done: load.value,
-          value: res.value
+          done: !await next(),
+          value: res.value!
         }
       }
     }
