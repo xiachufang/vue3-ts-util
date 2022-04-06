@@ -16,7 +16,7 @@ interface FetchRes<T> {
 }
 interface Res<T> {
   fetchRes: FetchRes<T>
-  mockRes: MockRes<T>
+  mockRes: Array<MockRes<T>>
 }
 
 interface PagedResourceTestEnv {

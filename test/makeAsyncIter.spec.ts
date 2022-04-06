@@ -1,6 +1,15 @@
-import { makeAsyncIterator } from '../src'
+import { cloneDeep } from 'lodash'
+import { delay, makeAsyncIterator } from '../src'
 import { pagedResourceTestEnv } from './pagedTestEnv'
 
+
+const getIterState = <T extends ReturnType<typeof makeAsyncIterator>> (iter: T) => {
+  return cloneDeep({
+    load: iter.load.value,
+    loading: iter.loading.value,
+    res: iter.res.value
+  })
+}
 
 describe('makeAsyncIterator', () => {
   it('资源迭代获取', async () => {
@@ -25,7 +34,7 @@ describe('makeAsyncIterator', () => {
     expect(res.value!.length).toBe(1)
     await next()
     expect(res.value!.length).toBe(2)
-     await next()
+    await next()
     expect(res.value!.length).toBe(3)
   })
 
@@ -68,12 +77,51 @@ describe('makeAsyncIterator', () => {
   })
 
   it('持续使用随机访问获取下一页迭代, (模拟antd分页器的翻页行为)', async () => {
-    const { fetchRes } = pagedResourceTestEnv(5)
+    const { fetchRes, mockRes } = pagedResourceTestEnv(5)
     const { next, load, res } = makeAsyncIterator(fetchRes, resp => resp.val)
-    const resSet = new Array<any>()
+    const resSet = new Array<number>()
     while (!load.value) {
       expect(await next(resSet.length)).toBeTruthy()
-      resSet.push(res.value)
+      resSet.push(res.value!)
     }
+    expect(resSet).toEqual(mockRes.map(v => v.val))
+  })
+
+  it('for await of 迭代', async () => {
+    const { fetchRes, mockRes } = pagedResourceTestEnv(5)
+    const { iter } = makeAsyncIterator(fetchRes, resp => resp.val)
+    const resSet = new Array<number>()
+    for await (const iterator of iter) {
+      resSet.push(iterator)
+    }
+    expect(resSet).toEqual(mockRes.map(v => v.val))
+  })
+
+  it('迭代被中断后状态不变', async () => {
+    const { fetchRes } = pagedResourceTestEnv(5, 300)
+    const iter = makeAsyncIterator(fetchRes, resp => resp.val)
+    await iter.next()
+    const lastState = getIterState(iter)
+    iter.next()
+    await delay(100)
+    iter.abort()
+    await delay(300)
+    expect(lastState).toEqual(getIterState(iter))
+  })
+
+  it('重置迭代器', async () => {
+    const { fetchRes } = pagedResourceTestEnv(5, 300)
+    const iter = makeAsyncIterator(fetchRes, resp => resp.val)
+    iter.next()
+    await expect(iter.reset()).rejects.toThrow() // 迭代进行时，不允许重置
+    await delay(500)
+    expect(iter.res.value).toBeDefined()
+    iter.next()
+    iter.reset({ force: true })
+    expect(iter.res.value).toBeUndefined()
+    expect(iter.loading.value).toBe(false)
+    expect(iter.load.value).toBe(false)
+    await iter.reset({ force: true, refetch: true })
+    expect(iter.res.value).toBeDefined()
   })
 })
