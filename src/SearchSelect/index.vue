@@ -5,7 +5,6 @@
     placeholder="请选择"
     :filter-option="false"
     @search="onSearch"
-    @blur="searchTarget = ''"
     :options="currOptions"
     optionLabelProp="title"
     show-search
