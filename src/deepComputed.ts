@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { debounce } from 'lodash'
+import { debounce, noop } from 'lodash'
 import { Ref, ref, watch } from 'vue'
 import { R } from '.'
 
 type LocalComputed<T> = {
   get: () => T,
   set: (v: T) => any
-}
+} | (() => T)
 type Path = (string | symbol | number)[]
 type DeepComputedConf = {
   proxy?: (target: any, p: Path, value: any, receiver: any) => void
@@ -30,7 +30,9 @@ const defaultConf: DeepComputedConf = {
  * @param arg0 和vue的computed一样
  * @param conf deepComputed的配置。其中proxy和ProxyHandler<T>['set']类似，用于观察数据的变化 。例如用来debug @example (_, path, v) => console.log(path, v)
  */
-export const deepComputed = <T extends object> ({ set, get }: LocalComputed<T>, conf: DeepComputedConf = {}) => {
+export const deepComputed = <T extends object> (setget: LocalComputed<T>, conf: DeepComputedConf = {}) => {
+  const get = typeof setget === 'function' ? setget : setget.get
+  const set = typeof setget === 'function' ? noop : setget.set
   const localValue = ref()
   const { proxy, enableClone, debounceSet, debounceGet } = { ...defaultConf, ...conf }
   const cloneOrRaw = enableClone ? R.clone : R.identity

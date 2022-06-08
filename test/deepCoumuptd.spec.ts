@@ -55,6 +55,16 @@ describe('deepCoumuptd', () => {
     expect(counter.value.val).toEqual(2)
   })
 
+  it('外部引用变化自动更新 - one tick - 单函数写法', async () => {
+    // 外部引用变化的下个tick更新
+    const res = ref(0)
+    const counter = deepComputed(() => ({ val: res.value })) // 默认关闭节流
+    expect(counter.value.val).toEqual(0)
+    res.value = 1
+    await delay()
+    expect(counter.value.val).toEqual(1)
+  })
+
   it('外部引用变化自动更新 - 节流', async () => {
     // one tick的节流版本
     const res = ref(0)
