@@ -1,10 +1,24 @@
+import moment from 'moment'
 import { Plugin, Store } from 'vuex'
+import { truthy } from '../truthy'
+import { WithRequired } from '../typedef'
 
-type ActionType<Mutation extends string> = Mutation | { type: Mutation, serialize (v: any): string, deserialize (s: string): any }
+type WatchOptions<Mutation extends string> = {
+  type: Mutation
+  expire?: moment.Duration
+  serialize?: (v: any) => string
+  deserialize?: (s: string) => any
+}
+
+type ActionType<Mutation extends string> = Mutation | WatchOptions<Mutation>
+
 /**
  * 持久化
  */
-export class VuexPersistence<Mutation extends string = string, RS = any> {
+export class VuexPersistence<
+  Mutation extends string = string,
+  RS = any
+  > {
   private watchType: ActionType<Mutation>[] = []
   // eslint-disable-next-line no-useless-constructor
   constructor(private namespace = '') { }
@@ -14,11 +28,7 @@ export class VuexPersistence<Mutation extends string = string, RS = any> {
       store.subscribe(({ type, payload }) => {
         const conf = this.getConf(type as Mutation)
         if (conf) {
-          if (typeof conf === 'object') {
-            this.set(conf.type, conf.serialize(payload))
-          } else {
-            this.set(conf, JSON.stringify(payload))
-          }
+          this.set(conf.type, payload)
         }
       })
     }
@@ -30,9 +40,8 @@ export class VuexPersistence<Mutation extends string = string, RS = any> {
  * @param type 监听的action类型
  */
   get (type: Mutation) {
-    const conf = this.getConf(type)
+    const conf = truthy(this.getConf(type))
     const serializeVal = localStorage.getItem(this.getStorageName(type))
-    const deserializeMethod = typeof conf === 'object' ? conf.deserialize : JSON.parse
     return {
       /**
        * 给从被获取失败时增加一个默认值
@@ -43,11 +52,22 @@ export class VuexPersistence<Mutation extends string = string, RS = any> {
       or: <T> (defaultVal: T, mergeIfObject = false): T => {
         if (serializeVal) {
           try {
-            const storeVal = deserializeMethod(serializeVal)
+            if (conf.expire) {
+              const lastUpdatedTimeStr = localStorage.getItem(this.getStorageLastUpdatedTimeName(conf.type))
+              if (lastUpdatedTimeStr && moment(lastUpdatedTimeStr).add(conf.expire).isBefore()) {
+                localStorage.removeItem(this.getStorageLastUpdatedTimeName(conf.type))
+                throw new Error(`expired type:${conf.type}`)
+              }
+            }
+            const storeVal = conf.deserialize(serializeVal)
             return typeof storeVal === 'object' && mergeIfObject ? { ...defaultVal, ...storeVal } : storeVal
           } catch (error) {
-            console.error(`deserialize fail. type:${type} error:${error}`)
             localStorage.removeItem(this.getStorageName(type))
+            if (error instanceof Error && error.message.includes('expired')) {
+
+            } else {
+              console.error(`deserialize fail. type:${type} error:${error}`)
+            }
           }
         }
         return defaultVal
@@ -56,20 +76,40 @@ export class VuexPersistence<Mutation extends string = string, RS = any> {
     }
   }
 
-  private set (type: Mutation, payload: string) {
-    localStorage.setItem(this.getStorageName(type), payload)
+  private set (type: Mutation, payload: any) {
+    const conf = truthy(this.getConf(type))
+    localStorage.setItem(this.getStorageName(conf.type), (conf.serialize)(payload))
+    if (conf.expire) {
+      localStorage.setItem(this.getStorageLastUpdatedTimeName(conf.type), moment().toString())
+    }
   }
 
   private getStorageName (type: Mutation) {
     return `${this.namespace}@${type}`
   }
 
-  private getConf (type: Mutation) {
-    return this.watchType.find(v => {
+  private getStorageLastUpdatedTimeName (type: Mutation) {
+    return `${this.namespace}@${type}:LastUpdatedTime`
+  }
+
+  private getConf (type: ActionType<Mutation>) {
+    const defaultConf = {
+      serialize: JSON.stringify, deserialize: JSON.parse
+    }
+    type Conf = WithRequired<WatchOptions<Mutation>, 'deserialize' | 'serialize'>
+    if (typeof type === 'object') {
+      return { ...defaultConf, ...type } as Conf
+    }
+    const conf = this.watchType.find(v => {
       if (typeof v === 'string') {
         return v === type
       }
       return v.type === type
     })
+    if (!conf) {
+      return null
+    }
+    const res = typeof conf === 'string' ? { type: conf, ...defaultConf } : { ...defaultConf, ...conf }
+    return res as Conf
   }
 }

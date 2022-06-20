@@ -38,11 +38,11 @@ export const devWatch = async () => {
               execSync(`rm -rf ${target}`)
               execSync(`mv ${path.resolve(__dirname, '../es')} ${target}`) // 不使用fs.copy是因为node14的fs有bug，15才修复
             }
-            if(false) {
-              const target = path.resolve(symlink, 'node_modules', 'vue3-ts-util', 'dist')
-              execSync(`rm -rf ${target}`)
-              execSync(`mv ${path.resolve(__dirname, '../dist')} ${target}`)
-            }
+            // {
+            //  const target = path.resolve(symlink, 'node_modules', 'vue3-ts-util', 'dist')
+            //  execSync(`rm -rf ${target}`)
+            //  execSync(`mv ${path.resolve(__dirname, '../dist')} ${target}`)
+            // }
           }
         }
         console.log(momentConvert(momentConvert()), e.code)

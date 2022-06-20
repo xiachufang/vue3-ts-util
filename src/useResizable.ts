@@ -27,10 +27,10 @@ export const useResizable = (ele: Ref<HTMLElement | undefined>, initRect: { widt
     ] as const)
       .find(target => twoPointDistance({ x: target[0], y: target[1] }, p) <= triggerWidth)
     if (resize) {
-      return resize
+      return resize.slice(2) as string[]
     }
     if (!isOutside.value) {
-      return [, , 'drag', 'move'] as const
+      return ['drag', 'move']
     }
     ok(false, "unreachable code")
   }
@@ -52,7 +52,7 @@ export const useResizable = (ele: Ref<HTMLElement | undefined>, initRect: { widt
     if (isOutside.value) {
       return
     }
-    const [_, _1, type, cursor] = getTriggerAreaInfo({ x: xy[0], y: xy[1] })
+    const [type, cursor] = getTriggerAreaInfo({ x: xy[0], y: xy[1] })
     cursorCss.value = cursor
     if (!pressed.value) {
       return
