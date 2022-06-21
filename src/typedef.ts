@@ -13,6 +13,9 @@ export type Columns<T> = (Omit<ColumnProps, 'customRender'> & {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionInfer<State, Commit extends Obj<Fn>> = ActionContext<State, any> & ActionContextInfer<Commit>
 
+
+export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
+
 export interface PageCursor {
   has_next: boolean
   has_prev: boolean
