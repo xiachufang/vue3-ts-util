@@ -10,7 +10,7 @@ type WatchOptions<Mutation extends string> = {
   deserialize?: (s: string) => any
 }
 
-type ActionType<Mutation extends string> = Mutation | WatchOptions<Mutation>
+export type ActionType<Mutation extends string> = Mutation | WatchOptions<Mutation>
 
 /**
  * 持久化
@@ -40,7 +40,10 @@ export class VuexPersistence<
  * @param type 监听的action类型
  */
   get (type: Mutation) {
-    const conf = truthy(this.getConf(type))
+    const conf = this.getConf(type)
+    if (!conf) {
+      throw new Error(`找不到Mutation:${type}，考虑是不是typo或者当前还没调用watch`)
+    }
     const serializeVal = localStorage.getItem(this.getStorageName(type))
     return {
       /**
@@ -54,7 +57,7 @@ export class VuexPersistence<
           try {
             if (conf.expire) {
               const lastUpdatedTimeStr = localStorage.getItem(this.getStorageLastUpdatedTimeName(conf.type))
-              if (lastUpdatedTimeStr && moment(lastUpdatedTimeStr).add(conf.expire).isBefore()) {
+              if (lastUpdatedTimeStr && moment(+lastUpdatedTimeStr).add(conf.expire).isBefore()) {
                 localStorage.removeItem(this.getStorageLastUpdatedTimeName(conf.type))
                 throw new Error(`expired type:${conf.type}`)
               }
@@ -80,7 +83,7 @@ export class VuexPersistence<
     const conf = truthy(this.getConf(type))
     localStorage.setItem(this.getStorageName(conf.type), (conf.serialize)(payload))
     if (conf.expire) {
-      localStorage.setItem(this.getStorageLastUpdatedTimeName(conf.type), moment().toString())
+      localStorage.setItem(this.getStorageLastUpdatedTimeName(conf.type), Date.now().toString())
     }
   }
 

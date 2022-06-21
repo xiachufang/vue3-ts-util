@@ -94,6 +94,6 @@ export const useResizable = (ele: Ref<HTMLElement | undefined>, initRect: { widt
       height: rect.height,
       cursor: cursorCss.value
     })),
-    style: computed(() => `;top:${rect.y}px;left:${rect.x}px;padding:8px;border:1px solid black;z-index: 100;width:${rect.width}px;height: ${rect.height}px;cursor:${cursorCss.value};`),
+    style: computed(() => `;top:${rect.y}px;left:${rect.x}px;width:${rect.width}px;height: ${rect.height}px;cursor:${cursorCss.value};`),
   }
 }
