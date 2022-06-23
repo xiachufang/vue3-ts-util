@@ -8,6 +8,9 @@ export const useFetchQueueHelper = (fetchQueue: FetchQueue) => {
   })
   return {
     fetchQueue,
+    async run<R> (action: () => Promise<R>): Promise<R> {
+      return fetchQueue.pushAction(action).res
+    },
     ...deepReadonly({
       loading,
     })

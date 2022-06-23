@@ -7,9 +7,6 @@ import { FetchQueue, useFetchQueueHelper } from '.'
  */
 export const strictQueue = (args: ConstructorParameters<typeof FetchQueue> = [1, 0, -1, 'throw']) => {
   const fetchQueue = new FetchQueue(...args)
-  return useFetchQueueHelper(fetchQueue) as {
-    loading: ComputedRef<boolean>
-    fetchQueue: FetchQueue
-  } // 编译时好像有点问题手动指定
+  return useFetchQueueHelper(fetchQueue)
 }
 export const useStrictQueue = strictQueue

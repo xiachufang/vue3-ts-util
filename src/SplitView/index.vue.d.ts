@@ -1,15 +1,12 @@
 declare const _default: import("vue").DefineComponent<{
     percent: {
-        type: import("vue").PropType<number>;
-        required: true;
+        default: number;
     };
     border: {
-        type: import("vue").PropType<boolean>;
-        required: true;
+        default: boolean;
     };
     direction: {
-        type: import("vue").PropType<"vertical" | "horizontal">;
-        required: true;
+        default: "vertical" | "horizontal";
     };
 }, {
     split: Readonly<import("vue").Ref<{
@@ -26,5 +23,9 @@ declare const _default: import("vue").DefineComponent<{
     percent: number;
     border: boolean;
     direction: "vertical" | "horizontal";
-} & {}>, {}>;
+} & {}>, {
+    percent: number;
+    border: boolean;
+    direction: "vertical" | "horizontal";
+}>;
 export default _default;
