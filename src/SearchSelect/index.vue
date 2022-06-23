@@ -8,6 +8,7 @@
     :options="currOptions"
     optionLabelProp="title"
     show-search
+    :mode="mode"
     v-bind="$attrs"
   />
 </template>
@@ -28,7 +29,11 @@ export default defineComponent({
     /**
      * 配置如何将选项转换成显示的文本，值，键
      */
-    conv: customPropType<SearchSelectConv<any>>()
+    conv: customPropType<SearchSelectConv<any>>(),
+    /**
+     * 需要多选加上这个
+     */
+    mode: customPropType<'multiple'>(false)
   },
   setup (props, ctx) {
     const searchTarget = ref('') // 当前搜索目标

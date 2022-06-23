@@ -18,6 +18,12 @@ declare const _default: import("vue").DefineComponent<{
         type: import("vue").PropType<SearchSelectConv<any>>;
         required: true;
     };
+    /**
+     * 需要多选加上这个
+     */
+    mode: {
+        type: import("vue").PropType<"multiple">;
+    };
 }, {
     currOptions: import("vue").ComputedRef<any>;
     onSearch: (target: string) => void;
@@ -27,9 +33,12 @@ declare const _default: import("vue").DefineComponent<{
     value?: unknown;
     options?: unknown;
     conv?: unknown;
+    mode?: unknown;
 } & {
     value: unknown;
     options: any[];
     conv: SearchSelectConv<any>;
-} & {}>, {}>;
+} & {
+    mode?: "multiple" | undefined;
+}>, {}>;
 export default _default;
