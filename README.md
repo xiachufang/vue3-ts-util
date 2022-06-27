@@ -9,6 +9,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 # 安装
 `yarn add vue3-ts-util`
 # 用法
+见文档[doc](doc)
 ## 网络请求相关
 打开可以查看对应详细点的文档
 1. [FetchQueue](doc/io.md#FetchQueue) 请求容器，用于控制多个请求的并发，重试，意外处理，自动控制loading，可以大量减少了`try catch finally`等代码的使用
@@ -25,7 +26,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 ```bash
 git clone ....
 cd vue3-ts-util
-yarn 
+yarn
 ....
 ```
 ## 使用dev-watch开发新功能及debug

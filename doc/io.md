@@ -1,5 +1,90 @@
 # FetchQueue
 请求容器，用于控制多个请求的并发，重试，意外处理，自动控制loading，可以大量减少了`try catch finally`等代码的使用
+## 构造参数
+```ts
+//最大并发数量， -1为不限制
+maxConcurrencyCount = -1,
+// 最大重试次数
+maxRetryCount = 3,
+// 重试间隔ms
+retryInterval = 3_000,
+// 错误处理方法，retry | throw
+errorHandleMethod: ErrorHandleMethod = 'retry'
+```
+## 类方法/属性
+```ts
+  /**
+   * 获取队列配置参数
+   */
+  conf: {
+    maxConcurrencyCount: number;
+    maxRetryCount: number;
+    retryInterval: number;
+    errorHandleMethod: ErrorHandleMethod;
+  };
+  /**
+   * 等待直到当前的队列为空
+   */
+  waitUntilEmpty(): Promise<void>;
+
+  /**
+   * 添加队列监听器
+   */
+  on (name: EventName, cb: Fn) : void;
+
+  /**
+   * 是否空闲
+   */
+  isIdle: boolean;
+
+  /**
+   * 压入一个任务到资源获取队列，如果有提示两个任务的元和任务函数一次则这两次函数的运行会是同一个结果
+   * @param meta 元标识，且将作为action函数的实参传入
+   * @param action 资源获取函数
+   */
+  pushAction<R> (action: () => Promise<R>): ExportFetchTask<R>;
+  /**
+   * 添加全局监听器
+   */
+  static on (name: EventName, cb: (target: FetchQueue, ...args: any[]) => any) ;
+
+```
+## pushAction返回的任务实例
+```ts
+type ExportFetchTask<Res> = {
+  // 正在运行的是哪个任务
+  readonly action: () => Promise<Res>;
+  // 运行结果
+  readonly res: Promise<Res>;
+  // 任务是否正在运行
+  readonly running: boolean;
+  // 取消当前任务
+  readonly cancel: () => void;
+}
+```
+## 例子
+### 最小化
+```ts
+const queue = new FetchQueue()
+const task = queue.pushAction(fetchUser)
+const user = await task.res
+```
+### 排队执行，失败自动重试
+```ts
+const queue = new FetchQueue(1, -1, 0) // 不并发, 不限制重试数量，重试间隔0
+queue.pushAction(action0)
+queue.pushAction(action1)
+queue.pushAction(action2)
+queue.pushAction(action3)
+await queue.waitUntilEmpty() // 将会按顺序执行所有任务，某个任务失败，会不断尝试直至完成
+```
+#### 更多的例子见单元测试
+
+## 衍生hooks
+在vue内的话更推荐使用包装过的几个hook，而不是裸FetchQueue。具体的点击跳到对应文档
+1. useFetchQueueHelper, 增加了更多有用的函数, 包括vue ref风格的loading。需要传入一个队列实例
+2. useRetryableQueue, useFetchQueueHelper的可重试参数包装
+3. useStrictQueue, useFetchQueueHelper的严格参数包装
 
 
 # Task
@@ -67,13 +152,15 @@ completedTask.then(res => {
 
 ```ts
 interface R {
-    load: Ref<boolean>, // 所有资源是否已加载完成
-    async next(): void, // 向前迭代
-    res: Ref<T>, // 当前迭代到资源
-    loading: Ref<boolean>, // 当前是否在加载中
-    cursorStack: string[], // 保存使用的所有cursor
-    reset (reFetch: bool): void, // 重置内部状态，多资源管理时用得到
-    [Symbol.asyncIterator]: ES2018AsyncIter,  // for await of 语法
+    load: Ref<boolean> // 所有资源是否已加载完成
+    async next(): void // 向前迭代
+    res: Ref<T> // 当前迭代到资源
+    abort(): void // 中断当前请求
+    loading: Ref<boolean> // 当前是否在加载中
+    cursorStack: string[] // 保存使用的所有cursor
+    // 重置内部状态，多资源管理时用得到,如果当前处于迭代中，直接重置会失败，考虑使用force
+    reset (reFetch: boolean | { force: boolean, reFetch: boolean }): Promise<void>
+    [Symbol.asyncIterator]: ES2018AsyncIter  // for await of 语法
     iter: {
       [Symbol.asyncIterator]: ES2018AsyncIter
     }
@@ -186,7 +273,7 @@ await hooks.iterationPost?.()
 ```
 
 
-# useAntdListPagination
+# useAntdListPagination / GeneralPagination
 useAntdListPagination是makeAsyncIter针对翻页做的一个适配，与GeneralPagation组件搭配使用，可以很容易写的出来一个翻页的组件
 ## 使用参考
 ```ts
