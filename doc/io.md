@@ -1,3 +1,35 @@
+- [FetchQueue](#fetchqueue)
+  - [构造参数](#构造参数)
+  - [类方法/属性](#类方法属性)
+  - [pushAction返回的任务实例](#pushaction返回的任务实例)
+  - [例子](#例子)
+    - [最小化](#最小化)
+    - [排队执行，失败自动重试](#排队执行失败自动重试)
+      - [更多的例子见单元测试](#更多的例子见单元测试)
+  - [衍生hooks](#衍生hooks)
+- [Task](#task)
+  - [参数](#参数)
+  - [返回值](#返回值)
+    - [停止轮训](#停止轮训)
+    - [获取轮训结果](#获取轮训结果)
+    - [获取轮训参数](#获取轮训参数)
+  - [一个简单的例子](#一个简单的例子)
+- [makeAsyncIter](#makeasynciter)
+  - [返回参数](#返回参数)
+  - [一个简单的例子](#一个简单的例子-1)
+  - [控制多资源，内部状态重置](#控制多资源内部状态重置)
+  - [返回类型的约束](#返回类型的约束)
+  - [在vue2 options api中使用](#在vue2-options-api中使用)
+  - [在小程序中使用](#在小程序中使用)
+  - [常用场景的使用](#常用场景的使用)
+    - [antd表格翻页](#antd表格翻页)
+    - [无限滚动](#无限滚动)
+- [useInfiniteScrolling](#useinfinitescrolling)
+  - [探底触发](#探底触发)
+  - [交叉触发模式](#交叉触发模式)
+  - [hooks](#hooks)
+- [useAntdListPagination / GeneralPagination](#useantdlistpagination--generalpagination)
+  - [使用参考](#使用参考)
 # FetchQueue
 请求容器，用于控制多个请求的并发，重试，意外处理，自动控制loading，可以大量减少了`try catch finally`等代码的使用
 ## 构造参数
@@ -142,7 +174,7 @@ completedTask.then(res => {
 })
 ```
 # makeAsyncIter
-将基于游标分页的请求转成异步迭代资源
+将基于游标分页的请求转成异步迭代资源，旨在提供更高程度的抽象，逻辑层只通过next()和reset()即可完成所有操作。
 
 从jarvis的Pagination到spam的useCursorControl再到lanfan-dashboard的makeAsyncIter对于分页资源控制的探索一直有在尝试，整体是呈现一个类型推导逐渐完善，手动管理的变量逐渐变少，不再需要手动处理意外的趋势。
 
@@ -207,14 +239,53 @@ type Response = { cursor: PageCursor }
 如果对应的接口不满足,可以参考下面尝试写个转换
 ```ts
 const apiCursorNormalizer = <T extends (...args: any[]) => { cursor: customCursor }>(api: T) => {
-    return (...args: Parameters<T>) => api(...args).then(resp => customCursor2PageCursor(resp.cursor))
+    return (...args: Parameters<T>) => api(...args).then(resp => ({ ...resp, curosr: customCursor2PageCursor(resp.cursor) }))
 }
 
 const iter = makeAsyncIter(
-    compose(apiCursorNormalizer, fetchRecipesCustomCursor),
+    apiCursorNormalizer(fetchRecipesCustomCursor),
     resp => resp.recipes
 )
 ```
+## 在vue2 options api中使用
+
+
+makeAsyncIter是使用的composition api的风格写法，只不过因为没有钩子和useXXX所以不需要强制与setup同步运行才没有以use开头，这种写法对options api不友好，不能适合直接用需要使用reactive包一层。
+其他的基本一致
+
+参考下图
+1. 在js中
+
+<img width="451" alt="image" src="https://user-images.githubusercontent.com/25872019/177975876-c1a3aaea-3b99-4ca2-a06a-f64c2c661d1f.png"></img>
+
+2. 在模板中
+<img width="337" alt="image" src="https://user-images.githubusercontent.com/25872019/177976468-0b262f3d-3f66-4afe-9796-56d4c64f8ba8.png"></img>
+
+
+[源码位置](https://github.com/xiachufang/jupiter/blob/master/ganymede/src/shared/util/makeAyncIter.ts), 实现和本库的有点微小差别。
+
+## 在小程序中使用
+[源码位置](https://github.com/xiachufang/weapp/blob/master/source/lib/asyncIterator.ts)，由于小程序和vue完全不同的响应式系统，使用起来有点差别，同时也抛弃了composition api的风格写法改用了class。
+这是一个最小无限滚动加载收藏的例子
+```ts
+Page({
+  data: {},
+  iter: new AsyncIterator(
+    cursor => pagedCollectedBoards({ cursor, size: 10 }),
+    resp => resp.content.cells,
+    { dataUpdateStrategy: 'merge' } // 无限滚动要保留之前获取的资源所以选择merge
+  ),
+  onLoad () {
+    this.iter.bindPage(this) // 绑定页面，为了在迭代器状态变化时通知页面
+    this.iter.next() // 进行首次加载
+  },
+  onReachBottom () {
+    this.iter.next() // 滚到底部时继续加载
+  }
+})
+
+```
+
 ## 常用场景的使用
 直接使用的makeAsyncIter的场景并不多，makeAsyncIter是对分页资源的一种可迭代的抽象。
 日常中更多的是使用针对不同场景使用不同的适配，makeAsyncIter与这些的关系有点类似zrender和echarts
@@ -222,7 +293,6 @@ const iter = makeAsyncIter(
 参考[useAntdListPagination](#useAntdListPagination)
 ### 无限滚动
 参考[useInfiniteScrolling](#useInfiniteScrolling)
-
 # useInfiniteScrolling
 useInfiniteScrolling是针对无限滚动做的一个适配，包含了两种触发模式，探底触发和交叉触发。
 ## 探底触发
