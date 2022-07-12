@@ -120,7 +120,7 @@ await queue.waitUntilEmpty() // 将会按顺序执行所有任务，某个任务
 #### 更多的例子见单元测试
 
 ## 衍生hooks
-在vue内的话更推荐使用包装过的几个hook，而不是裸FetchQueue。具体的点击跳到对应文档
+在vue内的话更推荐使用包装过的几个hook，而不是裸FetchQueue。具体的文档[hooks部分](./hooks.md#usefetchqueuehelperusestrictqueueuseretryablequeue)
 1. useFetchQueueHelper, 增加了更多有用的函数, 包括vue ref风格的loading。需要传入一个队列实例
 2. useRetryableQueue, useFetchQueueHelper的可重试参数包装
 3. useStrictQueue, useFetchQueueHelper的严格参数包装

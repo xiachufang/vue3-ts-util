@@ -10,6 +10,13 @@ interface Point {
 }
 
 const twoPointDistance = (a: Point, b: Point) => Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2))
+/**
+ * 用于鼠标拖拽调整调整某个元素的大小位置
+ * @param ele 控制的对象
+ * @param initRect 初始大小
+ * @param triggerWidth 触发可重置的范围大小
+ * @returns
+ */
 export const useResizable = (ele: Ref<HTMLElement | undefined>, initRect: { width: number, height: number; x: number; y: number }, triggerWidth = 50) => {
   const rect = reactive(initRect)
   const pressed = ref(false)
