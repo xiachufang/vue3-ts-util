@@ -1,5 +1,8 @@
-# mutation
-生成mutation函数的辅助函数
+- [mutation 生成mutation函数的辅助函数](#mutation-生成mutation函数的辅助函数)
+- [VuexPersistence 用于持久化的vuex插件](#vuexpersistence-用于持久化的vuex插件)
+  - [feature](#feature)
+  - [最小化例子](#最小化例子)
+# mutation 生成mutation函数的辅助函数
 ```ts
 const mutationSetter = mutation<AnnotationState>()
 
@@ -16,8 +19,7 @@ const mutations = {
 }
 ```
 
-# VuexPersistence
-用于持久化的vuex插件
+# VuexPersistence 用于持久化的vuex插件
 ## feature
 1. 监控mutations的commit并持久化
 2. 支持自定义序列化和反序列化
