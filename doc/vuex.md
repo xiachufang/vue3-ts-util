@@ -2,6 +2,8 @@
 - [VuexPersistence 用于持久化的vuex插件](#vuexpersistence-用于持久化的vuex插件)
   - [feature](#feature)
   - [最小化例子](#最小化例子)
+
+desc: vuex相关的
 # mutation 生成mutation函数的辅助函数
 ```ts
 const mutationSetter = mutation<AnnotationState>()

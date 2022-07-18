@@ -7,8 +7,7 @@
 - [useWatchDocument `document.addEventListener`的hook wrapper](#usewatchdocument-documentaddeventlistener的hook-wrapper)
 - [createTypedShareStateHook/useHookShareState 生成一个实例内进行状态共享的hook](#createtypedsharestatehookusehooksharestate-生成一个实例内进行状态共享的hook)
 - [useRouteId 路由参数id获取，合法判断](#userouteid-路由参数id获取合法判断)
-
-
+desc: vue3 composition api的hook
 # useDomRect hook风格获取dom的rect
 ```ts
 const contentDom = ref<HTMLDivElement>()

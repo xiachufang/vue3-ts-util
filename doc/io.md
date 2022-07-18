@@ -37,6 +37,8 @@
   - [hooks](#hooks)
 - [useAntdListPagination / GeneralPagination  翻页管理](#useantdlistpagination--generalpagination--翻页管理)
   - [使用参考](#使用参考)
+
+desc: 输入输出，网络请求相关的
 # FetchQueue 自动管理loading等的请求控制容器
 请求容器，用于控制多个请求的并发，重试，意外处理，自动控制loading，可以大量减少了`try catch finally`等代码的使用
 ## 构造参数
@@ -237,6 +239,8 @@ watch([keyword], () => iter.reset(true)) // keyword改变后，重置并重新�
 
 和上面的一样，这两种场景都是需要`reset()`，但是这个是应对请求时间较长的情况，如果你直接`reset`会引发断言错误，可以先`abort`中断掉之前的请求，或者直接`reset({ force: true })`。
 但不一定需要上面那种情况，如果觉得某次迭代时间过长，也可以`abort`返回之前的状态再重新`next`。
+
+<img width="438" alt="image" src="https://user-images.githubusercontent.com/25872019/178895676-2dc42a8d-7046-45f5-94c5-d1a83d75b7bf.png">
 ## 返回类型的约束
 makeAsyncIter是针对基于游标分页的请求，为了要获取到cursor的信息，使用了对返回类型进行约束的并发，必须满足以下类型，`next,next_cursor存在一个就行，prev同样`
 ```ts
@@ -337,7 +341,7 @@ this.iter.setStateUpdatedCallback(() => {
 })  // 在模板中 {{list}} {{hasMore}} 使用
 ```
 #### 简写方式 bindPage
-是`setStateUpdatedCallback`的进一步简化，需要注意的是`setStateUpdatedCallback`和`bingPage`同时只失效一个
+是`setStateUpdatedCallback`的进一步简化，需要注意的是`setStateUpdatedCallback`和`bingPage`同时只生效一个
 ```ts
 this.iter.bindPage(this) // 在模板中 {{res}} {{completed}} 使用
 this.iter.bindPage(this, 'recommend') // 在模板中 {{recommend.res}} {{recommend.completed}} 使用
