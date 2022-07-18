@@ -9,23 +9,109 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 # 安装
 `yarn add vue3-ts-util`
 # 用法
-## 网络请求相关
-打开可以查看对应详细点的文档
-1. [FetchQueue](doc/io.md#FetchQueue) 请求容器，用于控制多个请求的并发，重试，意外处理，自动控制loading，可以大量减少了`try catch finally`等代码的使用
-   1. [useStrictQueueHelper](doc/io.md#strictQueue) 在FetchQueue的基础上增加了对vue的一些便利性工具
-   2. [strictQueue](doc/io.md#strictQueue) 返回一个严格的请求队列，这是针对有副作用的请求而使用的
-2. [Task](doc/io.md#Task) 针对轮训请求的控制
-3. [makeAsyncIter](doc/io.md#makeAsyncIter) 将基于游标分页的请求转成异步迭代资源
-   1. [useAntdListPagination](doc/io.md#useAntdListPagination) makeAsyncIter针对翻页做的适配，与GeneralPagation组件搭配使用
-   2. [useInfiniteScrolling](doc/io.md#无限滚动)  makeAsyncIter针对无限滚动做的适配
+见文档[doc](doc)
+目录见下方
 
-## vuex相关
+<!--docinsert-->
+##  vue3 composition api的hook
+- [useDomRect hook风格获取dom的rect](./doc/hooks.md#usedomrect-hook风格获取dom的rect)
+- [useEmit 用于在hook内emit](./doc/hooks.md#useemit-用于在hook内emit)
+- [useFetchQueueHelper/useStrictQueue/useRetryableQueue fetchqueue的hook wrapper](./doc/hooks.md#usefetchqueuehelperusestrictqueueuseretryablequeue-fetchqueue的hook-wrapper)
+- [useInfiniteScrolling 无限滚动](./doc/hooks.md#useinfinitescrolling-无限滚动)
+- [useResizeable 用于鼠标拖拽调整调整某个元素的大小位置](./doc/hooks.md#useresizeable-用于鼠标拖拽调整调整某个元素的大小位置)
+- [useStackAlloc hook风格管理object url分配](./doc/hooks.md#usestackalloc-hook风格管理object-url分配)
+- [useWatchDocument `document.addEventListener`的hook wrapper](./doc/hooks.md#usewatchdocument-documentaddeventlistener的hook-wrapper)
+- [createTypedShareStateHook/useHookShareState 生成一个实例内进行状态共享的hook](./doc/hooks.md#createtypedsharestatehookusehooksharestate-生成一个实例内进行状态共享的hook)
+- [useRouteId 路由参数id获取，合法判断](./doc/hooks.md#userouteid-路由参数id获取合法判断)
+
+##  输入输出，网络请求相关的
+- [FetchQueue 自动管理loading等的请求控制容器](./doc/io.md#fetchqueue-自动管理loading等的请求控制容器)
+  - [构造参数](./doc/io.md#构造参数)
+  - [类方法/属性](./doc/io.md#类方法属性)
+  - [pushAction返回的任务实例](./doc/io.md#pushaction返回的任务实例)
+  - [例子](./doc/io.md#例子)
+    - [最小化](./doc/io.md#最小化)
+    - [排队执行，失败自动重试](./doc/io.md#排队执行失败自动重试)
+      - [更多的例子见单元测试](./doc/io.md#更多的例子见单元测试)
+  - [衍生hooks](./doc/io.md#衍生hooks)
+- [Task 轮训请求的控制](./doc/io.md#task-轮训请求的控制)
+  - [参数](./doc/io.md#参数)
+  - [返回值](./doc/io.md#返回值)
+    - [停止轮训](./doc/io.md#停止轮训)
+    - [获取轮训结果](./doc/io.md#获取轮训结果)
+    - [获取轮训参数](./doc/io.md#获取轮训参数)
+  - [一个简单的例子](./doc/io.md#一个简单的例子)
+- [makeAsyncIter 分页api的迭代管理](./doc/io.md#makeasynciter-分页api的迭代管理)
+  - [返回参数](./doc/io.md#返回参数)
+  - [一个简单的例子](./doc/io.md#一个简单的例子-1)
+  - [控制多资源，内部状态重置](./doc/io.md#控制多资源内部状态重置)
+  - [中断之前的请求](./doc/io.md#中断之前的请求)
+  - [返回类型的约束](./doc/io.md#返回类型的约束)
+  - [在vue2 options api中使用](./doc/io.md#在vue2-options-api中使用)
+  - [在小程序中使用](./doc/io.md#在小程序中使用)
+    - [最小无限滚动加载收藏的例子](./doc/io.md#最小无限滚动加载收藏的例子)
+    - [在ts/js中获取asyncIter的状态](./doc/io.md#在tsjs中获取asynciter的状态)
+    - [在wxml中获取asyncIter的状态](./doc/io.md#在wxml中获取asynciter的状态)
+      - [通过设置回调来实现状态变化时更新 setStateUpdatedCallback](./doc/io.md#通过设置回调来实现状态变化时更新-setstateupdatedcallback)
+      - [简写方式 bindPage](./doc/io.md#简写方式-bindpage)
+    - [如何知道asyncIter引发的界面修改完成时机](./doc/io.md#如何知道asynciter引发的界面修改完成时机)
+  - [常用场景的使用](./doc/io.md#常用场景的使用)
+    - [antd表格翻页](./doc/io.md#antd表格翻页)
+    - [无限滚动](./doc/io.md#无限滚动)
+- [useInfiniteScrolling 无限滚动](./doc/io.md#useinfinitescrolling-无限滚动)
+  - [探底触发](./doc/io.md#探底触发)
+  - [交叉触发模式](./doc/io.md#交叉触发模式)
+  - [hooks](./doc/io.md#hooks)
+- [useAntdListPagination / GeneralPagination  翻页管理](./doc/io.md#useantdlistpagination--generalpagination--翻页管理)
+  - [使用参考](./doc/io.md#使用参考)
+
+##  其余不好分类的函数
+- [deepComputed](./doc/other.md#deepcomputed)
+  - [主要的使用场景](./doc/other.md#主要的使用场景)
+  - [性能相关](./doc/other.md#性能相关)
+- [events/typedEventEmitter 类型安全的EventEmitter](./doc/other.md#eventstypedeventemitter-类型安全的eventemitter)
+- [image/getImageUrl 从下厨房用的图像结构构造url](./doc/other.md#imagegetimageurl-从下厨房用的图像结构构造url)
+- [assigIncrId 生成一个全局自增id](./doc/other.md#assigincrid-生成一个全局自增id)
+- [unid/typedID/ID 使用symbol实现的ID生成器](./doc/other.md#unidtypedidid-使用symbol实现的id生成器)
+- [delay,delayFn 延时，推迟控制流执行](./doc/other.md#delaydelayfn-延时推迟控制流执行)
+- [promise2ref promsie转成ref](./doc/other.md#promise2ref-promsie转成ref)
+- [promiseSetRef 在promise完成时设置某个ref](./doc/other.md#promisesetref-在promise完成时设置某个ref)
+- [momentConvert 一个函数实现下厨房常用的多种时间转换](./doc/other.md#momentconvert-一个函数实现下厨房常用的多种时间转换)
+
+##  类型及类型推导辅助相关
+- [globalComponents](./doc/type.md#globalcomponents)
+- [DeepReadonly转换一个类型为深度只读](./doc/type.md#deepreadonly转换一个类型为深度只读)
+  - [仅使用类型](./doc/type.md#仅使用类型)
+  - [也可以使用这种方式](./doc/type.md#也可以使用这种方式)
+- [ok 先验条件断言](./doc/type.md#ok-先验条件断言)
+- [thruthy 真值断言](./doc/type.md#thruthy-真值断言)
+- [Columns 描述antd表格结构的类型](./doc/type.md#columns-描述antd表格结构的类型)
+- [Image 下厨房的图像结构](./doc/type.md#image-下厨房的图像结构)
+- [WithRequired 将对象部分字段转为不可空](./doc/type.md#withrequired-将对象部分字段转为不可空)
+- [customPropType vue props用于推导自定义类型的辅助函数,使用interface风格写props](./doc/type.md#customproptype-vue-props用于推导自定义类型的辅助函数使用interface风格写props)
+
+##  本库的vue3组件
+- [GeneralPagination 翻页器和相关hook](./doc/vue3components.md#generalpagination-翻页器和相关hook)
+- [SplitView 支持鼠标拖拽调整的视图分割](./doc/vue3components.md#splitview-支持鼠标拖拽调整的视图分割)
+  - [props](./doc/vue3components.md#props)
+  - [例子](./doc/vue3components.md#例子)
+- [SearchSelect 支持搜索的选择，追求尽可能少的代码来描述](./doc/vue3components.md#searchselect-支持搜索的选择追求尽可能少的代码来描述)
+  - [props](./doc/vue3components.md#props-1)
+  - [例子](./doc/vue3components.md#例子-1)
+
+##  vuex相关的
+- [mutation 生成mutation函数的辅助函数](./doc/vuex.md#mutation-生成mutation函数的辅助函数)
+- [VuexPersistence 用于持久化的vuex插件](./doc/vuex.md#vuexpersistence-用于持久化的vuex插件)
+  - [feature](./doc/vuex.md#feature)
+  - [最小化例子](./doc/vuex.md#最小化例子)
+
+<!--docinsert-->
 # 开发
 ## 下载
 ```bash
 git clone ....
 cd vue3-ts-util
-yarn 
+yarn
 ....
 ```
 ## 使用dev-watch开发新功能及debug
@@ -78,8 +164,9 @@ yarn test
 ## 一些需要注意的地方
 1. vue组件的类型声明应该使用`yarn gen-vue-type`来自动生成，而不是手写或者使用shims,使用shims会丢失props的类型信息。对于props的声明应该尽量`customPropType`，可以尽可能接近写interface的体验
 2. 如果需要返回一个外部不可修改的对象可以使用`deepReadonly`
-3. 尽可能足够的单元测试
-4. 如果修改了组件相关及时修改vetur下的文件，及volar所使用的`src/globalComponents.ts`
+3. 修改文档后使用vscode的markdown in one更新所在文件的目录，然后使用`yarn gen-contents`生成合并的目录写入到readme<img width="623" alt="image" src="https://user-images.githubusercontent.com/25872019/179443451-6c974bf3-18d8-463f-a4df-1dcb0f787086.png">
+4. 尽可能足够的单元测试
+5. 如果修改了组件相关及时修改vetur下的文件，及volar所使用的`src/globalComponents.ts`
 
 
 

@@ -33,5 +33,6 @@ export interface Props {
   value: unknown
   options: any[]
   conv: SearchSelectConv<any>
+  mode?: 'multipie'
 }
 

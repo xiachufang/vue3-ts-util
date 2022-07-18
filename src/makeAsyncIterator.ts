@@ -17,6 +17,7 @@ export type ResetParams = {
 
 /**
  * 创建异步迭代器
+ * https://github.com/xiachufang/vue3-ts-util/blob/main/doc/io.md#makeasynciter
  * 分页资源获取,不需要手动管理cursor的迭代
  * @param resFetch 资源获取函数
  * @param resp2res 响应体转获取额资源

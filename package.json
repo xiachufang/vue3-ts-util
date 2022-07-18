@@ -65,6 +65,7 @@
     "build": "yarn clean && yarn rollup -c",
     "clean": "rm -rf ./dist ./es",
     "dev-watch": "ts-node --project tsnode.config.json scripts/index.ts --dev-watch",
+    "gen-contents": "ts-node --project tsnode.config.json scripts/index.ts --gen-contents",
     "import-optimize": "ts-node --project tsnode.config.json scripts/index.ts --import-optimize",
     "pre-release": "yarn build && yarn import-optimize && yarn test && nrm use npm",
     "test": "yarn jest",
