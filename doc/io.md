@@ -241,8 +241,9 @@ watch([keyword], () => iter.reset(true)) // keyword改变后，重置并重新�
 但不一定需要上面那种情况，如果觉得某次迭代时间过长，也可以`abort`返回之前的状态再重新`next`。
 
 <img width="438" alt="image" src="https://user-images.githubusercontent.com/25872019/178895676-2dc42a8d-7046-45f5-94c5-d1a83d75b7bf.png">
+
 ## 返回类型的约束
-makeAsyncIter是针对基于游标分页的请求，为了要获取到cursor的信息，使用了对返回类型进行约束的并发，必须满足以下类型，`next,next_cursor存在一个就行，prev同样`
+makeAsyncIter是针对基于游标分页的请求，为了要获取到cursor的信息，使用了对返回类型进行约束，必须满足以下类型，`next,next_cursor存在一个就行，prev同样`
 ```ts
 export interface PageCursor {
   has_next: boolean
