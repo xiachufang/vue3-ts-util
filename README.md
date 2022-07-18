@@ -10,9 +10,10 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 `yarn add vue3-ts-util`
 # 用法
 见文档[doc](doc)
+目录见下方
 
 <!--docinsert-->
-#  vue3 composition api的hook
+##  vue3 composition api的hook
 - [useDomRect hook风格获取dom的rect](./doc/hooks.md#usedomrect-hook风格获取dom的rect)
 - [useEmit 用于在hook内emit](./doc/hooks.md#useemit-用于在hook内emit)
 - [useFetchQueueHelper/useStrictQueue/useRetryableQueue fetchqueue的hook wrapper](./doc/hooks.md#usefetchqueuehelperusestrictqueueuseretryablequeue-fetchqueue的hook-wrapper)
@@ -23,7 +24,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 - [createTypedShareStateHook/useHookShareState 生成一个实例内进行状态共享的hook](./doc/hooks.md#createtypedsharestatehookusehooksharestate-生成一个实例内进行状态共享的hook)
 - [useRouteId 路由参数id获取，合法判断](./doc/hooks.md#userouteid-路由参数id获取合法判断)
 
-#  输入输出，网络请求相关的
+##  输入输出，网络请求相关的
 - [FetchQueue 自动管理loading等的请求控制容器](./doc/io.md#fetchqueue-自动管理loading等的请求控制容器)
   - [构造参数](./doc/io.md#构造参数)
   - [类方法/属性](./doc/io.md#类方法属性)
@@ -64,7 +65,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 - [useAntdListPagination / GeneralPagination  翻页管理](./doc/io.md#useantdlistpagination--generalpagination--翻页管理)
   - [使用参考](./doc/io.md#使用参考)
 
-#  其余不好分类的函数
+##  其余不好分类的函数
 - [deepComputed](./doc/other.md#deepcomputed)
   - [主要的使用场景](./doc/other.md#主要的使用场景)
   - [性能相关](./doc/other.md#性能相关)
@@ -77,7 +78,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 - [promiseSetRef 在promise完成时设置某个ref](./doc/other.md#promisesetref-在promise完成时设置某个ref)
 - [momentConvert 一个函数实现下厨房常用的多种时间转换](./doc/other.md#momentconvert-一个函数实现下厨房常用的多种时间转换)
 
-#  类型及类型推导辅助相关
+##  类型及类型推导辅助相关
 - [globalComponents](./doc/type.md#globalcomponents)
 - [DeepReadonly转换一个类型为深度只读](./doc/type.md#deepreadonly转换一个类型为深度只读)
   - [仅使用类型](./doc/type.md#仅使用类型)
@@ -89,7 +90,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 - [WithRequired 将对象部分字段转为不可空](./doc/type.md#withrequired-将对象部分字段转为不可空)
 - [customPropType vue props用于推导自定义类型的辅助函数,使用interface风格写props](./doc/type.md#customproptype-vue-props用于推导自定义类型的辅助函数使用interface风格写props)
 
-#  本库的vue3组件
+##  本库的vue3组件
 - [GeneralPagination 翻页器和相关hook](./doc/vue3components.md#generalpagination-翻页器和相关hook)
 - [SplitView 支持鼠标拖拽调整的视图分割](./doc/vue3components.md#splitview-支持鼠标拖拽调整的视图分割)
   - [props](./doc/vue3components.md#props)
@@ -98,7 +99,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
   - [props](./doc/vue3components.md#props-1)
   - [例子](./doc/vue3components.md#例子-1)
 
-#  vuex相关的
+##  vuex相关的
 - [mutation 生成mutation函数的辅助函数](./doc/vuex.md#mutation-生成mutation函数的辅助函数)
 - [VuexPersistence 用于持久化的vuex插件](./doc/vuex.md#vuexpersistence-用于持久化的vuex插件)
   - [feature](./doc/vuex.md#feature)
@@ -163,8 +164,9 @@ yarn test
 ## 一些需要注意的地方
 1. vue组件的类型声明应该使用`yarn gen-vue-type`来自动生成，而不是手写或者使用shims,使用shims会丢失props的类型信息。对于props的声明应该尽量`customPropType`，可以尽可能接近写interface的体验
 2. 如果需要返回一个外部不可修改的对象可以使用`deepReadonly`
-3. 尽可能足够的单元测试
-4. 如果修改了组件相关及时修改vetur下的文件，及volar所使用的`src/globalComponents.ts`
+3. 修改文档后使用vscode的markdown in one更新所在文件的目录，然后使用`yarn gen-contents`生成合并的目录写入到readme<img width="623" alt="image" src="https://user-images.githubusercontent.com/25872019/179443451-6c974bf3-18d8-463f-a4df-1dcb0f787086.png">
+4. 尽可能足够的单元测试
+5. 如果修改了组件相关及时修改vetur下的文件，及volar所使用的`src/globalComponents.ts`
 
 
 
