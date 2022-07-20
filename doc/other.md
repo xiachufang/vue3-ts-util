@@ -6,7 +6,7 @@
 - [assigIncrId 生成一个全局自增id](#assigincrid-生成一个全局自增id)
 - [unid/typedID/ID 使用symbol实现的ID生成器](#unidtypedidid-使用symbol实现的id生成器)
 - [delay,delayFn 延时，推迟控制流执行](#delaydelayfn-延时推迟控制流执行)
-- [promise2ref promsie转成ref](#promise2ref-promsie转成ref)
+- [promise2ref promise转成ref](#promise2ref-promise转成ref)
 - [promiseSetRef 在promise完成时设置某个ref](#promisesetref-在promise完成时设置某个ref)
 - [momentConvert 一个函数实现下厨房常用的多种时间转换](#momentconvert-一个函数实现下厨房常用的多种时间转换)
 
@@ -39,7 +39,7 @@ const recipe = deepComputed({
 该函数不是简单的watch({deep:true})实现，那样会导致watch和set相互调用栈溢出，而是使用proxy实现，默认监控浅层的object以及持续的array，在vue2中不可用，与vue2的响应式实现冲突。
 ![image](https://user-images.githubusercontent.com/25872019/178645084-055e3e18-8514-4df0-b0ef-8aca3015c5f7.png)
 <div style="text-align:center">图 替换为deepComputed前后的两种写法，二者等价</div>
-
+> 注意！！！如果发现修改了set没被调用请首先考虑是不是监听深度不够的问题
 
 # events/typedEventEmitter 类型安全的EventEmitter
 用法和node 的EventEmitter一样，不过新增了类型检查和hook风格管理的监听 useEventListen
@@ -100,7 +100,7 @@ await delay(300)
 doSomething() // 延迟300ms执行
 ```
 
-# promise2ref promsie转成ref
+# promise2ref promise转成ref
 # promiseSetRef 在promise完成时设置某个ref
 # momentConvert 一个函数实现下厨房常用的多种时间转换
 使用方法见单元测试momentConvert部分
