@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { debounce, noop } from 'lodash'
+import { debounce, isFunction, isObject, noop } from 'lodash'
 import { Ref, ref, watch } from 'vue'
 import { R } from '.'
 
@@ -13,12 +13,15 @@ type DeepComputedConf = {
   enableClone?: boolean
   debounceSet?: number
   debounceGet?: number
+  proxyDeep?: number
+  ignoreArrayDeepIncr?: boolean
 }
 
-const defaultConf: DeepComputedConf = {
-  enableClone: true
+const defaultConf = {
+  enableClone: true,
+  proxyDeep: 1,
+  ignoreArrayDeepIncr: true
 }
-
 /**
  * 能够确保进行深度嵌套对象或数组修改时，依旧使用set进行提交的computed。
  * 可以在保证flux架构的理念下减少中间变量的产生，以及外部数据变化时的手动管理
@@ -34,23 +37,45 @@ export const deepComputed = <T extends object> (setget: LocalComputed<T>, conf: 
   const get = typeof setget === 'function' ? setget : setget.get
   const set = typeof setget === 'function' ? noop : setget.set
   const localValue = ref()
-  const { proxy, enableClone, debounceSet, debounceGet } = { ...defaultConf, ...conf }
+  const { proxy, enableClone, debounceSet, debounceGet, proxyDeep, ignoreArrayDeepIncr } = { ...defaultConf, ...conf }
   const cloneOrRaw = enableClone ? R.clone : R.identity
   const rawFeedBackFunc = () => set(cloneOrRaw(localValue.value))
   const feedback = debounceSet ? debounce(rawFeedBackFunc, debounceSet) : rawFeedBackFunc
-  const createHandler = <T extends object> (extraPath: Path) => {
+  const proxyedMark = Symbol('proxyed')
+  const preventFeedbackMark = Symbol('preventFeedback')
+  const createHandler = <T extends object> (extraPath: Path, deep: number) => {
     const handler: ProxyHandler<T> = {
       set (target, p, value, receiver) {
-        const r = Reflect.set(target, p, value, receiver)
-        feedback() // 代理对象set时调用Computed里的set
-        proxy && proxy(target, [...extraPath, p], value, receiver)
+        if (isObject(target[p])) {
+          target[p][preventFeedbackMark] = true
+        }
+        const r = Reflect.set(target, p, proxyObject(value, extraPath, deep), receiver)
+        if (!target[preventFeedbackMark]) {
+          feedback() // 代理对象set时调用Computed里的set
+          proxy && proxy(target, [...extraPath, p], value, receiver)
+        }
         return r
       }
     }
     return handler
   }
-  const proxyObject = <T> (obj: any, path: Path): T => {
-    return new Proxy(obj instanceof Array ? obj.map((v, idx) => proxyObject(v, [...path, idx])) : obj, createHandler(path))
+  const proxyObject = <T> (obj: any, path: Path, deep = 0): T => {
+    if (deep > proxyDeep || !isObject(obj) || obj[proxyedMark]) { // 已经代理过我们跳过，因为同一个symbol，表示feedback的回调也是同一个
+      return obj
+    }
+    if (obj instanceof Array) {
+      obj = obj.map((v, idx) => proxyObject(v, [...path, idx]), deep + (ignoreArrayDeepIncr ? 0 : 1))
+    } else {
+      for (const key in obj) {
+        const val = obj[key]
+        if (typeof val === 'object') {
+          obj[key] = proxyObject(val, [...path, key], deep + 1)
+        }
+      }
+    }
+    obj[proxyedMark] = true
+    obj[preventFeedbackMark] = false
+    return new Proxy(obj, createHandler(path, deep))
   }
   localValue.value = proxyObject(cloneOrRaw(get()), [])
   const rawWatchFunc = (v: T) => (localValue.value = proxyObject(cloneOrRaw(v), []))
