@@ -19,9 +19,9 @@ describe('Task 轮询请求辅助类', () => {
     }
   }
 
-  it('轮询结束后reslove promsie', () => {
+  it('轮询结束后reslove promise', () => {
     const { completedTask } = Task.run(shareOption())
-    return completedTask // 返回一个promsie,如果在超时内没fulfilled，会报错
+    return completedTask // 返回一个promise,如果在超时内没fulfilled，会报错
   })
 
   it('action,验证器运行正常', async () => {

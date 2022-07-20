@@ -1,6 +1,6 @@
 
 /**
- * 返回一个在预定时间后resolve的promsie
+ * 返回一个在预定时间后resolve的promise
  */
 export const delay = (timeout = 0) => new Promise<void>(resolve => setTimeout(resolve, timeout))
 

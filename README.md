@@ -42,7 +42,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
     - [获取轮训参数](./doc/io.md#获取轮训参数)
   - [一个简单的例子](./doc/io.md#一个简单的例子)
 - [makeAsyncIter 分页api的迭代管理](./doc/io.md#makeasynciter-分页api的迭代管理)
-  - [返回参数](./doc/io.md#返回参数)
+  - [返回类型](./doc/io.md#返回类型)
   - [一个简单的例子](./doc/io.md#一个简单的例子-1)
   - [控制多资源，内部状态重置](./doc/io.md#控制多资源内部状态重置)
   - [中断之前的请求](./doc/io.md#中断之前的请求)
@@ -74,7 +74,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 - [assigIncrId 生成一个全局自增id](./doc/other.md#assigincrid-生成一个全局自增id)
 - [unid/typedID/ID 使用symbol实现的ID生成器](./doc/other.md#unidtypedidid-使用symbol实现的id生成器)
 - [delay,delayFn 延时，推迟控制流执行](./doc/other.md#delaydelayfn-延时推迟控制流执行)
-- [promise2ref promsie转成ref](./doc/other.md#promise2ref-promsie转成ref)
+- [promise2ref promise转成ref](./doc/other.md#promise2ref-promise转成ref)
 - [promiseSetRef 在promise完成时设置某个ref](./doc/other.md#promisesetref-在promise完成时设置某个ref)
 - [momentConvert 一个函数实现下厨房常用的多种时间转换](./doc/other.md#momentconvert-一个函数实现下厨房常用的多种时间转换)
 
