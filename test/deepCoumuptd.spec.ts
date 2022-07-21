@@ -26,6 +26,8 @@ describe('deepCoumuptd', () => {
     counter.value.push({ val: 2333 })
     expect(retVal.length).toBe(3)
     expect(retVal[2].val).toBe(2333)
+    counter.value[2].val = 666
+    expect(retVal[2].val).toBe(666)
   })
 
   it('断开引用', () => {
