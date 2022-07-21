@@ -1,6 +1,11 @@
 - [deepComputed](#deepcomputed)
   - [主要的使用场景](#主要的使用场景)
   - [性能相关](#性能相关)
+  - [需要注意的问题](#需要注意的问题)
+    - [如果发现修改了值但setter没被调用](#如果发现修改了值但setter没被调用)
+    - [调用了一次值的函数(例如Array::splice)，但是setter被多次调用？](#调用了一次值的函数例如arraysplice但是setter被多次调用)
+    - [原因](#原因)
+    - [解决方法](#解决方法)
 - [events/typedEventEmitter 类型安全的EventEmitter](#eventstypedeventemitter-类型安全的eventemitter)
 - [image/getImageUrl 从下厨房用的图像结构构造url](#imagegetimageurl-从下厨房用的图像结构构造url)
 - [assigIncrId 生成一个全局自增id](#assigincrid-生成一个全局自增id)
@@ -39,7 +44,29 @@ const recipe = deepComputed({
 该函数不是简单的watch({deep:true})实现，那样会导致watch和set相互调用栈溢出，而是使用proxy实现，默认监控浅层的object以及持续的array，在vue2中不可用，与vue2的响应式实现冲突。
 ![image](https://user-images.githubusercontent.com/25872019/178645084-055e3e18-8514-4df0-b0ef-8aca3015c5f7.png)
 <div style="text-align:center">图 替换为deepComputed前后的两种写法，二者等价</div>
-> 注意！！！如果发现修改了set没被调用请首先考虑是不是监听深度不够的问题
+
+## 需要注意的问题
+### 如果发现修改了值但setter没被调用
+请首先考虑是不是监听深度不够的问题，具体限制见上面。
+### 调用了一次值的函数(例如Array::splice)，但是setter被多次调用？
+### 原因
+deepComputed是监听值的属性，调用值的成员函数可能会造成属性的多次变更。
+例如Array::splice
+```ts
+const arr = ['world']
+arr.splice(0,0,'hello')
+ // 他会分成三步执行
+ // 第一步，将2的位置设置成'world',变成
+['world', 'world']
+ // 第二步，将1的位置设置成'hello',变成
+['hello', 'world']
+ // 第三步设置长度到2
+ arr.length = 2
+ // 这个过程将会调用3次setter
+```
+### 解决方法
+1. 直接忽略，相信大部分的场景都不需要考虑性能
+2. 使用debounce，直接在第二个参数里加`{ debounceSet: 10 }`就可以将大部分的密集的修改合并到一次，具体设置的数字看场景而定
 
 # events/typedEventEmitter 类型安全的EventEmitter
 用法和node 的EventEmitter一样，不过新增了类型检查和hook风格管理的监听 useEventListen

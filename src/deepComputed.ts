@@ -38,9 +38,13 @@ export const deepComputed = <T extends object> (setget: LocalComputed<T>, conf: 
   const cloneOrRaw = enableClone ? R.clone : R.identity
   const rawFeedBackFunc = () => set(cloneOrRaw(localValue.value))
   const feedback = debounceSet ? debounce(rawFeedBackFunc, debounceSet) : rawFeedBackFunc
+  // todo: 使用nextTick合并一段时间内的feedback，可控制深度的proxy
   const createHandler = <T extends object> (extraPath: Path) => {
     const handler: ProxyHandler<T> = {
       set (target, p, value, receiver) {
+        if (target instanceof Array) { // 数组设置了一个新的值，也会代理如果是对象的话
+          value = proxyObject(value, [...extraPath, p])
+        }
         const r = Reflect.set(target, p, value, receiver)
         feedback() // 代理对象set时调用Computed里的set
         proxy && proxy(target, [...extraPath, p], value, receiver)
@@ -50,6 +54,7 @@ export const deepComputed = <T extends object> (setget: LocalComputed<T>, conf: 
     return handler
   }
   const proxyObject = <T> (obj: any, path: Path): T => {
+    if (!obj || typeof obj !== 'object') return obj
     return new Proxy(obj instanceof Array ? obj.map((v, idx) => proxyObject(v, [...path, idx])) : obj, createHandler(path))
   }
   localValue.value = proxyObject(cloneOrRaw(get()), [])
