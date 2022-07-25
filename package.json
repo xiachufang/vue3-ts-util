@@ -68,7 +68,7 @@
     "gen-contents": "ts-node --project tsnode.config.json scripts/index.ts --gen-contents",
     "import-optimize": "ts-node --project tsnode.config.json scripts/index.ts --import-optimize",
     "pre-release": "yarn build && yarn import-optimize && yarn test && nrm use npm",
-    "test": "yarn jest",
+    "test": "NODE_OPTIONS=--unhandled-rejections=warn yarn jest",
     "gen-vue-type": "ts-node --project tsnode.config.json scripts/index.ts --gen-vue-type"
   }
 }
