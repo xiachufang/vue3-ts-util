@@ -168,11 +168,12 @@ yarn clean
 yarn test
 ```
 ## 一些需要注意的地方
-1. vue组件的类型声明应该使用`yarn gen-vue-type`来自动生成，而不是手写或者使用shims,使用shims会丢失props的类型信息。对于props的声明应该尽量`customPropType`，可以尽可能接近写interface的体验
+1. vue组件的类型声明应该使用`yarn gen-vue-type`来自动生成，而不是手写或者使用shims,使用shims会丢失props的类型信息。对于props的声明应该尽量`customPropType`，可以尽可能接近写interface的体验(setup的更好，直接defineProps)
 2. 如果需要返回一个外部不可修改的对象可以使用`deepReadonly`
 3. 修改文档后使用vscode的markdown in one更新所在文件的目录，然后使用`yarn gen-contents`生成合并的目录写入到readme<img width="623" alt="image" src="https://user-images.githubusercontent.com/25872019/179443451-6c974bf3-18d8-463f-a4df-1dcb0f787086.png">
 4. 尽可能足够的单元测试
 5. 如果修改了组件相关及时修改vetur下的文件，及volar所使用的`src/globalComponents.ts`
+6. 版本号修改参考https://semver.org/lang/zh-CN/
 
 
 

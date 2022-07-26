@@ -1,6 +1,7 @@
 <template>
   <a-select
-    v-model:value="selected"
+    :value="asNullValues.includes(selected) ? null : selected"
+    @update:value="v => selected = v"
     :get-popup-container="trigger => trigger.parentNode"
     placeholder="请选择"
     :filter-option="false"
@@ -16,7 +17,7 @@
 <script lang="ts">
 import { customPropType } from '../'
 import { computed, defineComponent, ref } from 'vue'
-import { useOptionsComputed } from '.'
+import { Props, useOptionsComputed } from '.'
 import { SearchSelectConv } from './typedef'
 
 export default defineComponent({
@@ -33,7 +34,12 @@ export default defineComponent({
     /**
      * 需要多选加上这个
      */
-    mode: customPropType<'multiple'>(false)
+    mode: customPropType<'multiple'>(false),
+    /**
+     * 可以看做是空值的列表, 默认0和空字符串，即传入0和空字符串时会把他当成是null来对待，而显示placeholder。
+     * 详细见对应文档部分
+     */
+    asNullValues: customPropType(() => [0, ''] as any[])
   },
   setup (props, ctx) {
     const searchTarget = ref('') // 当前搜索目标
@@ -47,7 +53,7 @@ export default defineComponent({
     const onSearch = (target: string) => {
       searchTarget.value = target
     }
-    const { currOptions } = useOptionsComputed(props, searchTarget)
+    const { currOptions } = useOptionsComputed(props as Props, searchTarget)
     return {
       currOptions,
       onSearch,

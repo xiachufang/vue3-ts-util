@@ -49,6 +49,7 @@ options 选项数组
 conv 定义如何从选项数组转换到值以及选项的文本，key回填时显示的文本,具体见SearchSelectConv
 value v-model的值，如果为多选类型则为array，否则是conv.value的返回类型
 mode 模式 多选的话multipie，单选不需要写
+asNullValues 可以看做是空值的列表, 默认0和空字符串，即传入0和空字符串时会把他当成是null来对待，而显示placeholder
 ## 例子
 ```ts
 const options = '黄瓜，土豆，胡萝卜，西红柿，茄子'.split('，').map((name,idx) => ({ id: idx + 1, name }))
@@ -61,4 +62,8 @@ const selectedID = ref<number>()
 ```
 ```html
 <search-select :options="options" v-model:value="selectedID" :conv="conv"/>
+```
+如果你传入的选项中存为值为0，''的值时，你需要这样添加`:as-null-values="[]"`，不然在选中0,''值时会把他当成null值而显示placeholder
+```html
+<search-select :options="options" v-model:value="selectedID" :conv="conv" :as-null-values="[]"/>
 ```

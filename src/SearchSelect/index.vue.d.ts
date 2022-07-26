@@ -24,6 +24,13 @@ declare const _default: import("vue").DefineComponent<{
     mode: {
         type: import("vue").PropType<"multiple">;
     };
+    /**
+     * 可以看做是空值的列表, 默认0和空字符串，即传入0和空字符串时会把他当成是null来对待，而显示placeholder。
+     * 详细见对应文档部分
+     */
+    asNullValues: {
+        default: any[];
+    };
 }, {
     currOptions: import("vue").ComputedRef<any>;
     onSearch: (target: string) => void;
@@ -34,11 +41,15 @@ declare const _default: import("vue").DefineComponent<{
     options?: unknown;
     conv?: unknown;
     mode?: unknown;
+    asNullValues?: unknown;
 } & {
     value: unknown;
     options: any[];
     conv: SearchSelectConv<any>;
+    asNullValues: any[];
 } & {
     mode?: "multiple" | undefined;
-}>, {}>;
+}>, {
+    asNullValues: any[];
+}>;
 export default _default;
