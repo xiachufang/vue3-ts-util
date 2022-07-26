@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { debounce, noop } from 'lodash'
 import { Ref, ref, watch } from 'vue'
-import { R } from '.'
+import { identity, clone } from 'ramda'
 
-type LocalComputed<T> = {
+export type LocalComputed<T> = {
   get: () => T,
   set: (v: T) => any
 } | (() => T)
-type Path = (string | symbol | number)[]
-type DeepComputedConf = {
+export type Path = (string | symbol | number)[]
+export type DeepComputedConf = {
   proxy?: (target: any, p: Path, value: any, receiver: any) => void
   enableClone?: boolean
   debounceSet?: number
   debounceGet?: number
 }
 
-const defaultConf: DeepComputedConf = {
+export const defaultConf: DeepComputedConf = {
   enableClone: true
 }
 
@@ -35,7 +35,7 @@ export const deepComputed = <T extends object> (setget: LocalComputed<T>, conf: 
   const set = typeof setget === 'function' ? noop : setget.set
   const localValue = ref()
   const { proxy, enableClone, debounceSet, debounceGet } = { ...defaultConf, ...conf }
-  const cloneOrRaw = enableClone ? R.clone : R.identity
+  const cloneOrRaw = enableClone ? clone : identity
   const rawFeedBackFunc = () => set(cloneOrRaw(localValue.value))
   const feedback = debounceSet ? debounce(rawFeedBackFunc, debounceSet) : rawFeedBackFunc
   // todo: 使用nextTick合并一段时间内的feedback，可控制深度的proxy
@@ -47,7 +47,7 @@ export const deepComputed = <T extends object> (setget: LocalComputed<T>, conf: 
         }
         const r = Reflect.set(target, p, value, receiver)
         feedback() // 代理对象set时调用Computed里的set
-        proxy && proxy(target, [...extraPath, p], value, receiver)
+        proxy?.(target, [...extraPath, p], value, receiver)
         return r
       }
     }

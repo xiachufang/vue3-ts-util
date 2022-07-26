@@ -6,6 +6,7 @@
     - [调用了一次值的函数(例如Array::splice)，但是setter被多次调用？](#调用了一次值的函数例如arraysplice但是setter被多次调用)
     - [原因](#原因)
     - [解决方法](#解决方法)
+- [deepComputedEffect 更好的deepComputed](#deepcomputedeffect-更好的deepcomputed)
 - [events/typedEventEmitter 类型安全的EventEmitter](#eventstypedeventemitter-类型安全的eventemitter)
 - [image/getImageUrl 从下厨房用的图像结构构造url](#imagegetimageurl-从下厨房用的图像结构构造url)
 - [assigIncrId 生成一个全局自增id](#assigincrid-生成一个全局自增id)
@@ -17,6 +18,7 @@
 
 desc: 其余不好分类的函数
 # deepComputed
+**已废弃改用deepComputedEffect， deepComputed已经上线了一年多，比较稳定暂时不删除**
 其概念类似computed函数，使用get获取初始化值，在调用get时收集外部依赖，在外部依赖变化时重新生成自己。.value = xxx时调用set函数。不过computed仅支持最外层的变化，而deepComputed则是支持更深层次的变化。
 改用deepComputed最明显的几个好处则是不需要手动外部数据的变化，不需要在数据修改后各种烦人的dispatch('xxxx'，xxx.value)或者ctx.emit('update:xxx'，xxx.value)`,在数据变化后自动帮你提交。
 ## 主要的使用场景
@@ -67,6 +69,29 @@ arr.splice(0,0,'hello')
 ### 解决方法
 1. 直接忽略，相信大部分的场景都不需要考虑性能
 2. 使用debounce，直接在第二个参数里加`{ debounceSet: 10 }`就可以将大部分的密集的修改合并到一次，具体设置的数字看场景而定
+3. deepComputedEffect支持直接对.value设置值，
+
+# deepComputedEffect 更好的deepComputed
+使用实现vue 原生effect api实现的deepComputed，语法概念基本相同，性能更好，去掉了诸多限制。
+相较于deepComputed
+1. deepComputedEffect是对整个树进行的监控，不用考虑深度问题
+2. deepComputedEffect支持.value = newVal, 对根部设置值，且不再强制要求是object
+3. 对deepComputedEffect返回值的修改触发的set回调，将不再是同步的，而是会在当前tick结束后触发（不会再出现调用了一次值的函数(例如Array::splice)，但是setter被多次调用？这种问题）
+4. 移除了proxy因为set回调的触发是异步的，因为是多个合并的无法明确追踪路径，需要自己比较
+
+```ts
+const { emitValue } = useEmit()
+const model = deepComputedEffect({
+  get: () => props.value,
+  set: emitValue
+})
+model.value = {  } // model.value将会被同步修改，和computed不同，这点看起来不是那么纯粹，但这是出于性能考虑
+await nextTick()
+// 触发emitValue
+model.value.text = 'hello world'
+await nextTick()
+// 触发emitValue
+```
 
 # events/typedEventEmitter 类型安全的EventEmitter
 用法和node 的EventEmitter一样，不过新增了类型检查和hook风格管理的监听 useEventListen

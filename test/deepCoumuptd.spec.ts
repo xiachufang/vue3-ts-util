@@ -2,7 +2,7 @@
 import { deepComputed, delay } from '../src'
 import { ref } from 'vue'
 const noop = () => undefined
-describe('deepCoumuptd', () => {
+describe('deepComputed', () => {
   it('响应object1层的修改', () => {
     const upstream = ref({ val: 0 })
     let retVal: { val: number } = { val: -1 }
