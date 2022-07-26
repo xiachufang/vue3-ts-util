@@ -74,6 +74,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
     - [调用了一次值的函数(例如Array::splice)，但是setter被多次调用？](./doc/other.md#调用了一次值的函数例如arraysplice但是setter被多次调用)
     - [原因](./doc/other.md#原因)
     - [解决方法](./doc/other.md#解决方法)
+- [deepComputedEffect 更好的deepComputed](./doc/other.md#deepcomputedeffect-更好的deepcomputed)
 - [events/typedEventEmitter 类型安全的EventEmitter](./doc/other.md#eventstypedeventemitter-类型安全的eventemitter)
 - [image/getImageUrl 从下厨房用的图像结构构造url](./doc/other.md#imagegetimageurl-从下厨房用的图像结构构造url)
 - [assigIncrId 生成一个全局自增id](./doc/other.md#assigincrid-生成一个全局自增id)
