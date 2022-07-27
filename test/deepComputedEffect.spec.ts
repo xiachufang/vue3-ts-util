@@ -60,9 +60,9 @@ describe('deepComputedEffect', () => {
       counter.value++
     }
     await nextTick()
-    counter.value++
-    counter.value++
     expect(fn).toBeCalledTimes(1)
+    counter.value++
+    counter.value++
     await nextTick()
     expect(fn).toBeCalledTimes(2)
   })
