@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { Plugin, Store } from 'vuex'
+import type { Plugin, Store } from 'vuex'
 import { truthy } from '../truthy'
 import { WithRequired } from '../typedef'
 

@@ -8,6 +8,9 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 
 # 安装
 `yarn add vue3-ts-util`
+
+> 需要先有对等依赖 yarn add vue vuex vue-router
+
 # 用法
 见文档[doc](doc)
 目录见下方

@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.5.0",
+  "version": "0.5.3",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
@@ -44,7 +44,10 @@
     "vue-loader": "^16.3.0",
     "vuex-dispatch-infer": "^0.7.3",
     "webpack": "^5.44.0",
-    "webpack-cli": "^4.7.2"
+    "webpack-cli": "^4.7.2",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0",
+    "vuex": "^4.0.0"
   },
   "dependencies": {
     "@vueuse/core": "^8.6.0",
@@ -52,10 +55,12 @@
     "ant-design-vue": "^2.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "ramda": "^0.27.1",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0",
-    "vuex": "^4.0.0"
+    "ramda": "^0.27.1"
+  },
+  "peerDependencies": {
+    "vue": ">=3.0.0",
+    "vue-router": ">=4.0.0",
+    "vuex": ">=4.0.0"
   },
   "vetur": {
     "tags": "vetur/tags.json",
