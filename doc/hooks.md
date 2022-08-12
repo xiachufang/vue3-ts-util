@@ -36,6 +36,7 @@ const res = await fetchQueue.pushAction(fetchRes).res // 和上面那个一致
 # useInfiniteScrolling 无限滚动
 见[doc/io.md#useinfinitescrolling](/doc/io.md#useinfinitescrolling)
 # useResizeable 用于鼠标拖拽调整调整某个元素的大小位置
+**用不到而且要求node12，需要从历史里面找回**
 demo状态写了一半发现用不上，但是现有的实现都能用
 ```ts
 const ele = ref<HTMLDivElement>()
