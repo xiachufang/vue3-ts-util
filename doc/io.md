@@ -390,7 +390,7 @@ const { loading, res, observe, reset } = useInfiniteScrolling(
 交叉触发适用于只是页面中的一部分进行滚动，当监听目标dom与根dom交叉时进行资源迭代，我们的后台项目大多用的这种，例如lanfan-dashboard的菜谱搜索组件和定制餐单的历史列表页。
 ```ts
 const root = ref<HtmlDivElement>()
-const { loading, res, observe, reset } = useInfiniteScrolling(
+const { loading, res, observe, reset, load } = useInfiniteScrolling(
   cursor => getPagedRecipe({ cursor }),
   resp => resp.recipes, { type: 'intersection', root } // root可空，默认使用文档视口
 )
@@ -400,7 +400,7 @@ const { loading, res, observe, reset } = useInfiniteScrolling(
   <ul>
     <li v-for="item in res ?? []" :key="recipe.id">{{item.data}}</li>
   </ul>
-  <div :ref="observe"></div>
+  <div :ref="observe" style="text-align:center"> {{ load ? '结束' : '加载中...'}} </div>
 </div>
 ```
 ##
