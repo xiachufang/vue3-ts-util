@@ -21,7 +21,7 @@ Object.entries({
 # GeneralPagination 翻页器和相关hook
 具体见[io的相关部分](./io.md#useantdlistpagination--generalpagination-翻页管理)
 # SplitView 支持鼠标拖拽调整的视图分割
-本库只实现了左右分割，需要上下分割，我在这里实现了[vue-ts-util-lite](https://github.com/zanllp/vue3-ts-util-lite/blob/main/src/SplitView/index.vue)
+支持横向，竖向分割
 ## props
 percent: 左边的视图的占比,number，默认50
 border: bool 一个浅灰色的框用来区分视图，默认关闭
