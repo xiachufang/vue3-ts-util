@@ -7,6 +7,7 @@
     - [原因](#原因)
     - [解决方法](#解决方法)
 - [deepComputedEffect 更好的deepComputed](#deepcomputedeffect-更好的deepcomputed)
+- [deepComputedPick 执行后二值之间仍然会双向同步的pick](#deepcomputedpick-执行后二值之间仍然会双向同步的pick)
 - [events/typedEventEmitter 类型安全的EventEmitter](#eventstypedeventemitter-类型安全的eventemitter)
 - [image/getImageUrl 从下厨房用的图像结构构造url](#imagegetimageurl-从下厨房用的图像结构构造url)
 - [assigIncrId 生成一个全局自增id](#assigincrid-生成一个全局自增id)
@@ -91,6 +92,12 @@ await nextTick()
 model.value.text = 'hello world'
 await nextTick()
 // 触发emitValue
+```
+# deepComputedPick 执行后二值之间仍然会双向同步的pick
+用法类似lodash的pick，区别是当你修改了model后在下个tick picked也会更新，反过来也一样，主要用于拆分大的model，具体可以参考对应测试
+```ts
+const model = ref({ a: 1, b: 2, c: 3 })
+const picked = deepComputedPick(model, ['a', 'b'])
 ```
 
 # events/typedEventEmitter 类型安全的EventEmitter

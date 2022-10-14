@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-util",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
