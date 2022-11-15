@@ -19,8 +19,8 @@ export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
 export interface PageCursor {
   has_next: boolean
   has_prev: boolean
-  next_cursor: string
-  prev_cursor: string
+  next_cursor?: string
+  prev_cursor?: string
   next: string
   prev: string
 }
