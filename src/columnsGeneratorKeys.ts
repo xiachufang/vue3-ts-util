@@ -6,10 +6,10 @@ import { ColumnProps } from 'ant-design-vue/lib/table/interface'
  */
 export const generateKey = <T extends ColumnProps>(col: T): T => {
   return col.key ? col : {
-    ...col,
     key: col.slots
       ? `_s_${col.slots.customRender}`
-      : `_${(col.dataIndex || col.title)}_`
+      : `_${(col.dataIndex || col.title)}_`,
+      ...col,
   }
 }
 

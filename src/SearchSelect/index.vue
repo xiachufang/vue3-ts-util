@@ -21,6 +21,7 @@ import { Props, useOptionsComputed } from '.'
 import { SearchSelectConv } from './typedef'
 
 export default defineComponent({
+  emits: ['update:value'],
   props: {
     value: customPropType<any>(),
     /**
