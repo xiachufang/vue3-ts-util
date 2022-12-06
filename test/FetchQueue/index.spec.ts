@@ -1,4 +1,5 @@
 /* eslint-disable no-plusplus */
+import { range } from 'lodash'
 import { delayFn, FetchQueue, delay } from '../../src'
 
 describe('FetchQueue 资源获取队列', () => {
@@ -113,6 +114,12 @@ describe('FetchQueue 资源获取队列', () => {
     const task = queue.pushAction(delayFn(999))
     setTimeout(() => task.cancel(), 100)
     await expect(task.res).rejects.toThrow()
+  })
+
+  it('支持携带额外的信息', async () => {
+    const queue = new FetchQueue<number>()
+    const actions = range(0, 100).map(v => queue.pushAction(delayFn(1000 + v), v))
+    actions.map((v,i) => expect(v.extra).toBe(i))
   })
 
 })

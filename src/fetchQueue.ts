@@ -7,7 +7,7 @@ export class FetchTaskCancel extends Error {
 
 }
 
-interface FetchTask<Res> {
+interface FetchTask<Res, Extra> {
   /**
    * 任务运行函数
    */
@@ -27,6 +27,11 @@ interface FetchTask<Res> {
   cancel(): void;
 
   /**
+   * 携带的额外信息你可以使用他标识一个任务
+   */
+  extra: Extra
+
+  /**
    * 运行该任务，私有
    */
   run: () => void;
@@ -34,16 +39,16 @@ interface FetchTask<Res> {
 /**
  * 对外暴露的任务压入到队列的运行标识
  */
-type ExportFetchTask<Res> = Readonly<Omit<FetchTask<Res>, 'run'>>
+type ExportFetchTask<Res, Extra> = Readonly<Omit<FetchTask<Res, Extra>, 'run'>>
 /**
  * 内部队列实现
  */
-type FetchQueueInternal = FetchTask<any>[]
+type FetchQueueInternal = FetchTask<any, any>[]
 /**
  * 错误处理方法
  */
 type ErrorHandleMethod = 'retry' | 'throw' // 重试或者直接抛异常
-export class FetchQueue {
+export class FetchQueue<Extra = undefined> {
   // eslint-disable-next-line no-useless-constructor
   constructor (
     /**
@@ -120,7 +125,7 @@ export class FetchQueue {
   /**
    * 运行任务
    */
-  private runAction<R> (task: FetchTask<R>, onResolve: (arg: R) => void, onReject: (e: Error) => void) {
+  private runAction<R> (task: FetchTask<R, Extra>, onResolve: (arg: R) => void, onReject: (e: Error) => void) {
     const { action } = task
     task.running = true
     this.noticeIdleChange()
@@ -188,17 +193,18 @@ export class FetchQueue {
    * @param meta 元标识，且将作为action函数的实参传入
    * @param action 资源获取函数
    */
-  pushAction<R> (action: () => Promise<R>): ExportFetchTask<R> {
+  pushAction<R> (action: () => Promise<R>, ...args: Extra extends undefined ? []: [extra: Extra]): ExportFetchTask<R, Extra> {
     let onResolve: (arg: R) => void
     let onReject: (error: Error) => void
     const res = new Promise<R>((resolve, reject) => {
       onResolve = resolve
       onReject = reject
     })
-    const task: FetchTask<R> = {
+    const task: FetchTask<R, Extra> = {
       running: false,
       action,
       res,
+      extra: args[0]!,
       cancel: () => onReject(new FetchTaskCancel()),
       run: () => this.runAction(task, onResolve, onReject)
     }
@@ -213,7 +219,7 @@ export class FetchQueue {
     this.queue.push(task)
     this.noticeChange()
     this.tryRunNext() // 尝试运行刚才压入的任务
-    return deepReadonly(task)
+    return task
   }
 
 }
