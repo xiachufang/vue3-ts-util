@@ -1,6 +1,7 @@
 import { ComponentInternalInstance, onBeforeMount, onMounted, Ref } from 'vue'
 import { makeAsyncIterator, truthy, useWatchDocument } from '.'
 import { PageCursor } from './typedef'
+import type { VNodeProps } from 'vue'
 
 type InfiniteScrollingReachBottomOptions = {
   type: 'reach-bottom'
@@ -18,7 +19,14 @@ type InfiniteScrollingIntersectionOptions = {
   root?: Ref<HTMLElement | undefined>
 }
 
-export type InfiniteScrollingOptions = InfiniteScrollingReachBottomOptions | InfiniteScrollingIntersectionOptions
+export type InfiniteScrollingGeneralOptions = {
+  /**
+   * 挂载时进行首次获取，默认true
+   */
+  initOnMounted?: boolean
+}
+
+export type InfiniteScrollingOptions = (InfiniteScrollingReachBottomOptions | InfiniteScrollingIntersectionOptions) & InfiniteScrollingGeneralOptions
 
 const isElement = (el: any): el is Element => typeof el?.tagName === 'string'
 
@@ -46,7 +54,9 @@ export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R extends
   }
 
   onMounted(() => {
-    iter.next()
+    if (opt.initOnMounted !== false) {
+      iter.next()
+    }
     if (opt.type === 'intersection' && opt.target?.value) {
       io?.observe(truthy(opt.target?.value))
     }
@@ -56,15 +66,16 @@ export const useInfiniteScrolling = <T extends { cursor: PageCursor }, R extends
     io?.disconnect()
   })
 
+  /**
+   * 用于进行动态添加监视目标
+   */
+  const observe: VNodeProps['ref'] = (ref) => {
+    if (isElement(ref)) {
+      io?.observe(ref)
+    }
+  }
   return {
     ...iter,
-    /**
-     * 用于进行动态添加监视目标
-     */
-    observe (ref: Element | ComponentInternalInstance | null) {
-      if (isElement(ref)) {
-        io?.observe(ref)
-      }
-    }
+    observe
   }
 }
