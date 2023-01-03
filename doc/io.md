@@ -5,7 +5,10 @@
   - [例子](#例子)
     - [最小化](#最小化)
     - [排队执行，失败自动重试](#排队执行失败自动重试)
-      - [更多的例子见单元测试](#更多的例子见单元测试)
+    - [取消任务，监听任务被取消](#取消任务监听任务被取消)
+    - [给任务添加标识/额外信息](#给任务添加标识额外信息)
+    - [让FetchQueue成为响应式](#让fetchqueue成为响应式)
+  - [更多的例子见单元测试,测试要详细的多](#更多的例子见单元测试测试要详细的多)
   - [衍生hooks](#衍生hooks)
 - [Task 轮训请求的控制](#task-轮训请求的控制)
   - [参数](#参数)
@@ -34,6 +37,7 @@
 - [useInfiniteScrolling 无限滚动](#useinfinitescrolling-无限滚动)
   - [探底触发](#探底触发)
   - [交叉触发模式](#交叉触发模式)
+  - [](#)
   - [hooks](#hooks)
 - [useAntdListPagination / GeneralPagination  翻页管理](#useantdlistpagination--generalpagination--翻页管理)
   - [使用参考](#使用参考)
@@ -54,6 +58,7 @@ errorHandleMethod: ErrorHandleMethod = 'retry'
 ```
 ## 类方法/属性
 ```ts
+class {
   /**
    * 获取队列配置参数
    */
@@ -79,6 +84,11 @@ errorHandleMethod: ErrorHandleMethod = 'retry'
   isIdle: boolean;
 
   /**
+   * 获取当前正在运行的任务
+   */
+  tasks: ExportFetchTask<R>[];
+
+  /**
    * 压入一个任务到资源获取队列，如果有提示两个任务的元和任务函数一次则这两次函数的运行会是同一个结果
    * @param meta 元标识，且将作为action函数的实参传入
    * @param action 资源获取函数
@@ -88,7 +98,7 @@ errorHandleMethod: ErrorHandleMethod = 'retry'
    * 添加全局监听器
    */
   static on (name: EventName, cb: (target: FetchQueue, ...args: any[]) => any) ;
-
+}
 ```
 ## pushAction返回的任务实例
 ```ts
@@ -119,7 +129,51 @@ queue.pushAction(action2)
 queue.pushAction(action3)
 await queue.waitUntilEmpty() // 将会按顺序执行所有任务，某个任务失败，会不断尝试直至完成
 ```
-#### 更多的例子见单元测试
+### 取消任务，监听任务被取消
+取消任务很简单直接cancel就行
+```ts
+const task = queue.pushAction(action)
+task.cancel()
+```
+监听任务被取消，有两种办法，可以直接catch错误判断，或者添加监听器
+```ts
+queue.pushAction(act => {
+  act.events.on('cancel', handleCancel) // 对于一些上传很有用，可以直接将cancel写在里面，避免往外传变量
+})
+
+
+const task = queue.pushAction(action)
+try {
+  await task.res
+} catch (err) {
+  if (err instanceof FetchTaskCancel) {
+    handleCancel()
+  }
+}
+```
+### 给任务添加标识/额外信息
+对于FetchQueue返回的结果类型可以是不固定的，但标识的类型是固定的
+```ts
+const q = new FetchQueue<string>()
+const act = q.push(action, 'task-1') // 在第二个参数填入标识
+q.push(action, 'task-2')
+
+act.extra === 'task-1' // true
+
+const q = new FetchQueue<{ type: 'upload' } | { type: 'download' }>()
+
+// 标识在区分一大堆任务时很有用
+q.task.filter(predicate) // 获取你想查看的任务
+```
+### 让FetchQueue成为响应式
+想要FetchQueue具有响应式除了借助那个监听事件外还可以直接
+```ts
+const queue = reactive(new FetchQueue())
+const queue = ref(new FetchQueue())
+```
+，这在vue中很有用
+
+## 更多的例子见单元测试,测试要详细的多
 
 ## 衍生hooks
 在vue内的话更推荐使用包装过的几个hook，而不是裸FetchQueue。具体的文档[hooks部分](./hooks.md#usefetchqueuehelperusestrictqueueuseretryablequeue)
