@@ -1,6 +1,7 @@
 /* eslint-disable no-plusplus */
 import { range } from 'lodash'
 import { delayFn, FetchQueue, delay } from '../../src'
+import { Equal, Expect, Awaited } from '../typeVerify'
 
 describe('FetchQueue 资源获取队列', () => {
   jest.setTimeout(10_000)
@@ -116,10 +117,23 @@ describe('FetchQueue 资源获取队列', () => {
     await expect(task.res).rejects.toThrow()
   })
 
-  it('支持携带额外的信息', async () => {
+  it('支持携带额外的信息,用于标识身份', async () => {
     const queue = new FetchQueue<number>()
     const actions = range(0, 100).map(v => queue.pushAction(delayFn(1000 + v), v))
     actions.map((v,i) => expect(v.extra).toBe(i))
+  })
+
+  it('在action中监听被cancel', async () => {
+    const queue = new FetchQueue()
+    const fn = jest.fn()
+    const act = queue.pushAction(async act => {
+      act.events.on('cancel', fn)
+      await delay(99999)
+      return 1
+    })
+    act.cancel()
+    expect(fn).toBeCalled()
+    type _ = Expect<Equal<Awaited<typeof act['res']>, number>>
   })
 
 })

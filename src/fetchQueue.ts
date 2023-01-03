@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-parameter-properties */
 import EventEmitter from 'events'
 import type { Fn } from 'vuex-dispatch-infer'
-import { deepReadonly, delay } from '.'
+import { deepReadonly, delay, typedEventEmitter, TypedEventEmitter } from '.'
 type EventName = 'RETRIES_EXHAUESTED' | 'FETCH_QUEUE_CHANGE' | 'FETCH_QUEUE_IDLE_STATE_CHANGE'
 export class FetchTaskCancel extends Error {
   constructor(msg?: string) {
@@ -9,12 +9,14 @@ export class FetchTaskCancel extends Error {
     this.name = FetchTaskCancel.name
   }
 }
-
+type ActionEventEmitter = TypedEventEmitter<{ cancel: undefined }>
+type ActionArg = { events: ActionEventEmitter }
 interface FetchTask<Res, Extra> {
   /**
    * 任务运行函数
+   * 会传入当前实例,支持在action设置被cancel时的行为
    */
-  action: () => Promise<Res>
+  action: (inst: ActionArg) => Promise<Res>
   /**
    * 任务结果，异步
    */
@@ -38,6 +40,8 @@ interface FetchTask<Res, Extra> {
    * 运行该任务，私有
    */
   run: () => void
+
+  events: ActionEventEmitter
 }
 /**
  * 对外暴露的任务压入到队列的运行标识
@@ -139,7 +143,7 @@ export class FetchQueue<Extra = undefined> {
     // 增加一个action的wrap便于递归
     const actionRetryWrap = async (availableRetryCount = this.maxRetryCount): Promise<void> => {
       try {
-        const res = await action()
+        const res = await action(task as any)
         onResolve(res)
       } catch (error: any) {
         switch (this.errorHandleMethod) {
@@ -196,24 +200,29 @@ export class FetchQueue<Extra = undefined> {
   }
 
   /**
-   * 压入一个任务到资源获取队列，如果有提示两个任务的元和任务函数一次则这两次函数的运行会是同一个结果
-   * @param meta 元标识，且将作为action函数的实参传入
+   * 压入一个任务到资源获取队列
    * @param action 资源获取函数
+   * @param extra 额外信息，常用于标识
    */
-  pushAction<R> (action: () => Promise<R>, ...args: Extra extends undefined ? [] : [extra: Extra]): ExportFetchTask<R, Extra> {
+  pushAction<R> (action: (inst: ActionArg) => Promise<R>, ...args: Extra extends undefined ? [] : [extra: Extra]): ExportFetchTask<R, Extra> {
     let onResolve: (arg: R) => void
     let onReject: (error: Error) => void
     const res = new Promise<R>((resolve, reject) => {
       onResolve = resolve
       onReject = reject
     })
+    const events = typedEventEmitter().eventEmitter as ActionEventEmitter
     const task: FetchTask<R, Extra> = {
       running: false,
       action,
       res,
       extra: args[0]!,
-      cancel: () => onReject(new FetchTaskCancel()),
-      run: () => this.runAction(task, onResolve, onReject)
+      cancel: () => {
+        events.emit('cancel')
+        onReject(new FetchTaskCancel())
+      },
+      run: () => this.runAction(task, onResolve, onReject),
+      events
     }
     res.finally(() => {
       // 当前任务完成或者出现异常但是处理完了后，从队列中移除，并通知队列，队列空闲状态变化，并尝试运行下一个
