@@ -20,6 +20,8 @@ export const defaultConf: DeepComputedConf = {
 }
 
 /**
+ * @deprecated use deepComputedEffect instead
+ *
  * 能够确保进行深度嵌套对象或数组修改时，依旧使用set进行提交的computed。
  * 可以在保证flux架构的理念下减少中间变量的产生，以及外部数据变化时的手动管理
  *

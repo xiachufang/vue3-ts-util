@@ -4,48 +4,56 @@ import type { Fn } from 'vuex-dispatch-infer'
 import { deepReadonly, delay } from '.'
 type EventName = 'RETRIES_EXHAUESTED' | 'FETCH_QUEUE_CHANGE' | 'FETCH_QUEUE_IDLE_STATE_CHANGE'
 export class FetchTaskCancel extends Error {
-
+  constructor(msg?: string) {
+    super(msg)
+    this.name = FetchTaskCancel.name
+  }
 }
 
-interface FetchTask<Res> {
+interface FetchTask<Res, Extra> {
   /**
    * 任务运行函数
    */
-  action: () => Promise<Res>;
+  action: () => Promise<Res>
   /**
    * 任务结果，异步
    */
-  res: Promise<Res>;
+  res: Promise<Res>
   /**
    * 任务是否正在运行，因为有最大并发数量的限制，可能不会马上分到时间
    */
-  running: boolean;
+  running: boolean
 
   /**
    * 取消当前任务
    */
-  cancel(): void;
+  cancel (): void
+
+  /**
+   * 携带的额外信息你可以使用他标识一个任务
+   */
+  extra: Extra
 
   /**
    * 运行该任务，私有
    */
-  run: () => void;
+  run: () => void
 }
 /**
  * 对外暴露的任务压入到队列的运行标识
  */
-type ExportFetchTask<Res> = Readonly<Omit<FetchTask<Res>, 'run'>>
+type ExportFetchTask<Res, Extra> = Readonly<Omit<FetchTask<Res, Extra>, 'run'>>
 /**
  * 内部队列实现
  */
-type FetchQueueInternal = FetchTask<any>[]
+type FetchQueueInternal<Extra> = FetchTask<any, Extra>[]
 /**
  * 错误处理方法
  */
 type ErrorHandleMethod = 'retry' | 'throw' // 重试或者直接抛异常
-export class FetchQueue {
+export class FetchQueue<Extra = undefined> {
   // eslint-disable-next-line no-useless-constructor
-  constructor (
+  constructor(
     /**
      * 最大并发数量
      */
@@ -73,10 +81,14 @@ export class FetchQueue {
 
   private eventEmitter = new EventEmitter()
 
-  private queue: FetchQueueInternal = []
+  private queue: FetchQueueInternal<Extra> = []
 
   private get currConcurrencyCount () {
     return this.queue.filter(item => item.running).length
+  }
+
+  get tasks () {
+    return deepReadonly([...this.queue])
   }
 
   get conf () {
@@ -120,7 +132,7 @@ export class FetchQueue {
   /**
    * 运行任务
    */
-  private runAction<R> (task: FetchTask<R>, onResolve: (arg: R) => void, onReject: (e: Error) => void) {
+  private runAction<R> (task: FetchTask<R, Extra>, onResolve: (arg: R) => void, onReject: (e: Error) => void) {
     const { action } = task
     task.running = true
     this.noticeIdleChange()
@@ -188,17 +200,18 @@ export class FetchQueue {
    * @param meta 元标识，且将作为action函数的实参传入
    * @param action 资源获取函数
    */
-  pushAction<R> (action: () => Promise<R>): ExportFetchTask<R> {
+  pushAction<R> (action: () => Promise<R>, ...args: Extra extends undefined ? [] : [extra: Extra]): ExportFetchTask<R, Extra> {
     let onResolve: (arg: R) => void
     let onReject: (error: Error) => void
     const res = new Promise<R>((resolve, reject) => {
       onResolve = resolve
       onReject = reject
     })
-    const task: FetchTask<R> = {
+    const task: FetchTask<R, Extra> = {
       running: false,
       action,
       res,
+      extra: args[0]!,
       cancel: () => onReject(new FetchTaskCancel()),
       run: () => this.runAction(task, onResolve, onReject)
     }
@@ -213,7 +226,7 @@ export class FetchQueue {
     this.queue.push(task)
     this.noticeChange()
     this.tryRunNext() // 尝试运行刚才压入的任务
-    return deepReadonly(task)
+    return task
   }
 
 }
