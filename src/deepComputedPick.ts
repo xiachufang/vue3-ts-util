@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import { pick } from 'lodash-commonjs-es'
 import type { Ref } from 'vue'
 import { deepComputedEffect } from './deepComputedEffect'
 

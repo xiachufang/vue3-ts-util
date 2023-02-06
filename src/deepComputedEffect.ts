@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { debounce, isNumber, noop } from 'lodash'
+import { debounce, isNumber, noop } from 'lodash-commonjs-es'
 import { Ref, ref, watch, watchEffect } from 'vue'
 import { identity, clone } from 'ramda'
 import { LocalComputed, DeepComputedConf, defaultConf } from './deepComputed'

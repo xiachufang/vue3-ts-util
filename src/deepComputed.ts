@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { debounce, noop } from 'lodash'
+import { debounce, noop } from 'lodash-commonjs-es'
 import { Ref, ref, watch } from 'vue'
 import { identity, clone } from 'ramda'
 
