@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import { range } from 'lodash'
+import { range } from 'lodash-commonjs-es'
 import { delayFn, FetchQueue, delay } from '../../src'
 import { Equal, Expect, Awaited } from '../typeVerify'
 

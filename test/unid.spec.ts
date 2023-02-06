@@ -1,4 +1,4 @@
-import { range } from 'lodash'
+import { range } from 'lodash-commonjs-es'
 import { ID, idKey } from '../src'
 describe('ID生成', () => {
 
