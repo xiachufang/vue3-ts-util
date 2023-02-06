@@ -1,6 +1,7 @@
 import { PropType } from 'vue'
 
 /**
+ * @deprecated 使用vue setup，已经不再需要这个
  * vue props用于推导自定义类型的辅助函数
  * @example
  * props: {

@@ -29,7 +29,14 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
   /**
    * 所有资源加载完成
    */
-  const load = ref(false)
+  const completed = ref(false)
+
+  /**
+   * @deprecated
+   * 所有资源加载完成
+   */
+  const load = completed
+
   /**
    * 当前迭代到的资源
    */
@@ -59,7 +66,7 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
    */
   const next = async (idx?: number) => {
     if (loading.value || // next应该由外部世界确保不被调用，资源迭代是互斥的
-      (load.value && typeof idx === 'undefined')) { // 如果不是进行随机访问，那在全部加载完成时失败
+      (completed.value && typeof idx === 'undefined')) { // 如果不是进行随机访问，那在全部加载完成时失败
       return false
     }
     loading.value = true
@@ -83,7 +90,7 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
       updateRes(resp2res(resp))
       const newCursor = resp.cursor
       if (idx === cursorStack.length - 1 || typeof idx !== 'number') { // 在最后一页向前时，光标栈才压入
-        load.value = !newCursor.has_next
+        completed.value = !newCursor.has_next
         if (newCursor.has_next) {
           const next = newCursor.next_cursor || newCursor.next
           ok(typeof next === 'string')
@@ -122,7 +129,7 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
     cursorStack.splice(0, cursorStack.length, '')
     loading.value = false
     res.value = undefined
-    load.value = false
+    completed.value = false
     refetch && await next()
   }
 
@@ -148,6 +155,7 @@ export const makeAsyncIterator = <T extends { cursor: PageCursor }, R> (resFetch
     loading,
     cursorStack,
     reset,
+    completed,
     [Symbol.asyncIterator]: asyncIter,
     iter: {
       [Symbol.asyncIterator]: asyncIter
