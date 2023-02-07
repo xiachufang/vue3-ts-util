@@ -1,11 +1,13 @@
-import moment from 'moment'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
 import type { Plugin, Store } from 'vuex'
 import { truthy } from '../truthy'
 import { WithRequired } from '../typedef'
 
+dayjs.extend(duration)
 type WatchOptions<Mutation extends string> = {
   type: Mutation
-  expire?: moment.Duration
+  expire?: duration.Duration
   serialize?: (v: any) => string
   deserialize?: (s: string) => any
 }
@@ -57,7 +59,7 @@ export class VuexPersistence<
           try {
             if (conf.expire) {
               const lastUpdatedTimeStr = localStorage.getItem(this.getStorageLastUpdatedTimeName(conf.type))
-              if (lastUpdatedTimeStr && moment(+lastUpdatedTimeStr).add(conf.expire).isBefore()) {
+              if (lastUpdatedTimeStr && dayjs(+lastUpdatedTimeStr).add(conf.expire).isBefore(dayjs())) {
                 localStorage.removeItem(this.getStorageLastUpdatedTimeName(conf.type))
                 throw new Error(`expired type:${conf.type}`)
               }

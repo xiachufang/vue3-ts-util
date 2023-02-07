@@ -1,9 +1,11 @@
 <template>
-  <a-pagination @change="option.onChange" :total="option.total" :current="option.curr" @update:current="option.setCurr" :page-size="option.pageSize"/>
+  <a-pagination @change="option.onChange" :total="option.total" :current="option.curr" @update:current="option.setCurr"
+    :page-size="option.pageSize" />
 </template>
 <script lang="ts">
 import { customPropType, PaginationOption } from '..'
 import { defineComponent } from 'vue'
+import { Pagination as APagination } from 'ant-design-vue'
 
 /**
  * @example
@@ -13,6 +15,9 @@ import { defineComponent } from 'vue'
  * ```
  */
 export default defineComponent({
+  components: {
+    APagination
+  },
   props: {
     option: customPropType<PaginationOption>()
   },
