@@ -19,8 +19,12 @@ import { customPropType } from '../'
 import { computed, defineComponent, ref } from 'vue'
 import { Props, useOptionsComputed } from '.'
 import { SearchSelectConv } from './typedef'
+import { Select as ASelect }  from 'ant-design-vue'
 
 export default defineComponent({
+  components: {
+    ASelect
+  },
   emits: ['update:value'],
   props: {
     value: customPropType<any>(),

@@ -12,6 +12,7 @@ const fsp = fs.promises
 const optimizedMark = '/* import-optimized */'
 
 export const importOptimize = async (dir: string) => {
+  return '好像有点问题，暂时不使用'
   for await (const file of await fsp.opendir(dir)) {
     if (file.isDirectory()) {
       await importOptimize(path.join(dir, file.name))
