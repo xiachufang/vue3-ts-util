@@ -1,4 +1,3 @@
-import { importOptimize } from './importOptimize'
 import { startGenVueType } from './generateVueType'
 import { devWatch } from './watch'
 import { genContents } from './genContents'
@@ -11,8 +10,6 @@ switch (type) {
   case 'gen-vue-type':
     startGenVueType()
     break
-  case 'import-optimize':
-    importOptimize('es/src')
     break
   case 'dev-watch':
     devWatch()

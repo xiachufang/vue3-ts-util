@@ -3,3 +3,4 @@ es
 *.log
 node_modules
 scripts/conf.json
+.DS_Store

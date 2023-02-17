@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-parameter-properties */
-import EventEmitter from 'events'
+import { EventEmitter } from 'eventemitter3'
 import type { Fn } from 'vuex-dispatch-infer'
 import { deepReadonly, delay, typedEventEmitter, TypedEventEmitter } from '.'
 type EventName = 'RETRIES_EXHAUESTED' | 'FETCH_QUEUE_CHANGE' | 'FETCH_QUEUE_IDLE_STATE_CHANGE'
