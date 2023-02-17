@@ -1,5 +1,5 @@
 
-import { EventEmitter } from 'events'
+import { EventEmitter } from 'eventemitter3'
 import { onBeforeUnmount } from 'vue'
 /**
  * TypeStrong 的EventEmitter

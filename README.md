@@ -5,7 +5,6 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 [![Node.js CI](https://github.com/xiachufang/vue3-ts-util/actions/workflows/ci.yml/badge.svg)](https://github.com/xiachufang/vue3-ts-util/actions/workflows/ci.yml)
 [![](https://img.shields.io/npm/v/vue3-ts-util.svg)](https://www.npmjs.com/package/vue3-ts-util)
 
-
 # 安装
 `yarn add vue3-ts-util`
 
@@ -121,6 +120,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 
 <!--docinsert-->
 # 开发
+> rollup-plugin-vue已经没维护，出现问题搞不定可以考虑vite
 ## 下载
 ```bash
 git clone ....

@@ -2,7 +2,6 @@ import loadConfigFile from 'rollup/dist/loadConfigFile'
 import path from 'path'
 import * as fs from 'fs'
 import * as rollup from 'rollup'
-import { importOptimize } from './importOptimize'
 import { execSync } from 'child_process'
 import { momentConvert } from '../src/momentConvert'
 
@@ -31,7 +30,6 @@ export const devWatch = async () => {
           console.error(e.error)
         }
         if (e.code === 'END') {
-          await importOptimize('es/src') // import优化在开发时对性能的提升其实是无所谓的，主要是怕优化出现问题，这样可以提现暴露
           if (symlink) { // 尝试了使用符号链接，但是也出现了readme中在”ref在改变后够观测不到“的问题
             {
               const target = path.resolve(symlink, 'node_modules', 'vue3-ts-util', 'es')
