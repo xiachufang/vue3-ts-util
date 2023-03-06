@@ -6,12 +6,12 @@ type EventName = 'RETRIES_EXHAUESTED' | 'FETCH_QUEUE_CHANGE' | 'FETCH_QUEUE_IDLE
 export class FetchTaskCancel extends Error {
   constructor(msg?: string) {
     super(msg)
-    this.name = FetchTaskCancel.name
+    this.name = 'FetchTaskCancel'
   }
 }
 type ActionEventEmitter = TypedEventEmitter<{ cancel: undefined }>
-type ActionArg = { events: ActionEventEmitter }
-interface FetchTask<Res, Extra> {
+export type ActionArg = { events: ActionEventEmitter }
+export interface FetchTask<Res, Extra> {
   /**
    * 任务运行函数
    * 会传入当前实例,支持在action设置被cancel时的行为

@@ -9,6 +9,7 @@ import { momentConvert } from '../src/momentConvert'
 interface DevWatchConf {
   symlink?: string
 }
+const fsp = fs.promises
 
 /**
  * 文件修改 -> 编译打包 -> import优化 -> 复制到目标文件夹内
@@ -30,17 +31,12 @@ export const devWatch = async () => {
           console.error(e.error)
         }
         if (e.code === 'END') {
-          if (symlink) { // 尝试了使用符号链接，但是也出现了readme中在”ref在改变后够观测不到“的问题
+          if (symlink) {
             {
-              const target = path.resolve(symlink, 'node_modules', 'vue3-ts-util', 'es')
-              execSync(`rm -rf ${target}`)
-              execSync(`mv ${path.resolve(__dirname, '../es')} ${target}`) // 不使用fs.copy是因为node14的fs有bug，15才修复
+              const target = path.resolve(symlink, 'node_modules', 'vue3-ts-util')
+              await fsp.rm(target, { recursive: true, force: true })
+              await fsp.symlink(path.resolve(__dirname, '..'), target)
             }
-            // {
-            //  const target = path.resolve(symlink, 'node_modules', 'vue3-ts-util', 'dist')
-            //  execSync(`rm -rf ${target}`)
-            //  execSync(`mv ${path.resolve(__dirname, '../dist')} ${target}`)
-            // }
           }
         }
         console.log(momentConvert(momentConvert()), e.code)

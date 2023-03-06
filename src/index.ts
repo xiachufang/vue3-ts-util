@@ -36,3 +36,4 @@ export * as R from 'ramda'
 export { default as SplitView } from './SplitView/index.vue'
 export { ok } from './assert'
 import './globalComponents'
+
