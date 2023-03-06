@@ -1,7 +1,7 @@
 class AssertError extends Error {
   constructor(msg = 'Oops! 出了点问题。请检查您的代码。') {
     super(msg)
-    this.name = AssertError.name
+    this.name = 'AssertError'
   }
 }
 

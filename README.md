@@ -129,6 +129,34 @@ yarn
 ....
 ```
 ## 使用dev-watch开发新功能及debug
+大部分功能使用单元测试即可完成。
+
+如果想要在其他项目中进行开发测试可以这么操作,以一个vite项目为例
+### 修改vite配置，使其能监听变化
+不需要实时watch的可以跳过
+```ts
+import { defineConfig, searchForWorkspaceRoot, UserConfig } from 'vite'
+
+
+export default defineConfig({
+  optimizeDeps: {
+    exclude: ['vue3-ts-util'] // 监听这个包的变化
+  },
+  server: {
+    watch: {
+      ignored: ['!**/node_modules/vue3-ts-util/es/**'],
+    },
+    fs: {
+      allow: [
+        searchForWorkspaceRoot(process.cwd()),
+        // 自定义规则
+        '/Users/xxxxxx/project/vue3-ts-util' // 本项目地址
+      ]
+    }
+  }
+})
+```
+### 创建符号链接，启动编译监听
 在scripts的文件夹下创建conf.json
 ```json
 {
@@ -137,13 +165,15 @@ yarn
   }
 }
 ```
-`symlink`指向你开发&debug用的项目，再
+`symlink`指向你开发&debug用的项目, 上面这个操作也可以通过npm link/yarn link 等代替,但是我感觉还不如直接用这个symlink, see https://github.com/yarnpkg/yarn/issues/1957。
+
+再
 ```bash
 yarn dev-watch # 开启即时编译
 ```
 直接在这边修改src下面ts,tsx,vue,就可以即时在那边生效。做到近似在同一个项目内开发的体验。
 
-需要注意的是，这个即时编译只针对esm构建可用。且关闭后目标项目还是使用的最后构建的包，如果需要改回去重新安装一遍`vue3-ts-util`就行
+需要注意的是关闭后目标项目还是使用的最后构建的包，如果需要改回去重新安装一遍`vue3-ts-util`就行
 ## npm scripts说明
 ### 预发行
 ```
