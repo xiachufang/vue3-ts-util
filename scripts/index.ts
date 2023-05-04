@@ -10,7 +10,6 @@ switch (type) {
   case 'gen-vue-type':
     startGenVueType()
     break
-    break
   case 'dev-watch':
     devWatch()
     break

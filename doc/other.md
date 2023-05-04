@@ -102,8 +102,9 @@ const picked = deepComputedPick(model, ['a', 'b'])
 
 # events/typedEventEmitter 类型安全的EventEmitter
 用法和node 的EventEmitter一样，不过新增了类型检查和hook风格管理的监听 useEventListen
+类型声明参考EventEmitter3
 ```ts
-const { eventEmitter, useEventListen } = typedEventEmitter<{ userInfoLoaded: undefined, cancelTask: number }>()
+const { eventEmitter, useEventListen } = typedEventEmitter<{ userInfoLoaded(): void, cancelTask(v: number): void }>()
 eventEmitter.emit('userInfoLoaded') // ok
 eventEmitter.emit('userInfo') // 类型错误
 eventEmitter.emit('cancelTask') // 类型错误
