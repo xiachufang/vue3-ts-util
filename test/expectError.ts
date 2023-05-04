@@ -14,7 +14,7 @@ export class ExpectError extends Error {
    return {
       runCount: 0,
       errorCount: 0,
-      ...typedEventEmitter<{ error: number }>(),
+      ...typedEventEmitter<{ error(_: number ): void }>(),
       try () {
         const currProbability = errorProbability[++this.runCount]
         if (Math.random() < currProbability) {

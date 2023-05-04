@@ -7,6 +7,7 @@
 - [useWatchDocument `document.addEventListener`的hook wrapper](#usewatchdocument-documentaddeventlistener的hook-wrapper)
 - [createTypedShareStateHook/useHookShareState 生成一个实例内进行状态共享的hook](#createtypedsharestatehookusehooksharestate-生成一个实例内进行状态共享的hook)
 - [useRouteId 路由参数id获取，合法判断](#userouteid-路由参数id获取合法判断)
+
 desc: vue3 composition api的hook
 # useDomRect hook风格获取dom的rect
 ```ts
@@ -71,6 +72,21 @@ const useB = () => {
   const { count } = useHookShareState().toRefs() // 使用torefs展开
   count.value++ // 若useA与useB在同一实例内，则这两个为同一个数
 }
+```
+你也可以在运行时传入参数,这对于我们在顶级作用域（例如单独的ts文件）创建hook，但是部分参数需要在组件内部传入
+```ts
+const paramsInit = () => ({ total: 1 })
+const { useHookShareState } = createTypedShareStateHook((inst, params) => {
+ const count = ref(0)
+ return {
+   count,
+   overTotal: computed(() => count.value > params.total)
+ }
+}, paramsInit)
+
+const { state } = useHookShareState({ total: 4 }) // 仅第一个useHookShareState的有效，不传fallback到paramsInit
+state.count = 5
+expect(state.overTotal).toBe(true)
 ```
 更多细节可以看相关单元测试
 

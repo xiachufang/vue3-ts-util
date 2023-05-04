@@ -1,29 +1,22 @@
 
 import { EventEmitter } from 'eventemitter3'
 import { onBeforeUnmount } from 'vue'
+import { Fn } from 'vuex-dispatch-infer'
 /**
  * TypeStrong 的EventEmitter
  */
+export type TypedEventEmitter<EventKV extends Record<string, Fn>> = EventEmitter<EventKV>
 
-export type TypedEventEmitter<EventKV extends Record<string, any>, Keys extends keyof EventKV = keyof EventKV> =
-  Omit<EventEmitter, 'once' | 'on' | 'off' | 'emit' | 'removeAllListeners'> & ({
-    once<K extends Keys> (k: K, fn: (v: EventKV[K]) => void): void
-    on<K extends Keys> (k: K, fn: (v: EventKV[K]) => void): void
-    off<K extends Keys> (k: K, fn: (v: EventKV[K]) => void): void
-    emit<K extends Keys, V = EventKV[K]> (k: K, ...args: V extends undefined ? [] : [v: V]): void
-    removeAllListeners (k?: Keys): void
-  })
-
-export const typedEventEmitter = <EventKV extends Record<string, any>> () => {
+export const typedEventEmitter = <EventKV extends Record<string, Fn>> () => {
   type Keys = keyof EventKV
-  const eventEmitter = new EventEmitter() as TypedEventEmitter<EventKV>
+  const eventEmitter = new EventEmitter<EventKV>()
 
   /**
    * 带RAII的事件监听
    */
-  const useEventListen = <K extends Keys> (e: K, fn: (v: EventKV[K]) => any) => {
-    eventEmitter.on(e, fn)
-    onBeforeUnmount(() => eventEmitter.off(e, fn))
+  const useEventListen = <K extends Keys> (e: K, fn: EventKV[K]) => {
+    eventEmitter.on(e as any, fn as any)
+    onBeforeUnmount(() => eventEmitter.off(e as any, fn as any))
   }
 
   return {
@@ -31,3 +24,4 @@ export const typedEventEmitter = <EventKV extends Record<string, any>> () => {
     useEventListen
   }
 }
+

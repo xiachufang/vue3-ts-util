@@ -9,7 +9,7 @@ export class FetchTaskCancel extends Error {
     this.name = 'FetchTaskCancel'
   }
 }
-type ActionEventEmitter = TypedEventEmitter<{ cancel: undefined }>
+type ActionEventEmitter = TypedEventEmitter<{ cancel(): void }>
 export type ActionArg = { events: ActionEventEmitter }
 export interface FetchTask<Res, Extra> {
   /**
@@ -211,7 +211,7 @@ export class FetchQueue<Extra = undefined> {
       onResolve = resolve
       onReject = reject
     })
-    const events = typedEventEmitter().eventEmitter as ActionEventEmitter
+    const events = typedEventEmitter().eventEmitter as any as ActionEventEmitter
     const task: FetchTask<R, Extra> = {
       running: false,
       action,
