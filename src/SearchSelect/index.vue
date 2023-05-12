@@ -21,6 +21,8 @@ import { Props, useOptionsComputed } from '.'
 import { SearchSelectConv } from './typedef'
 import { Select as ASelect }  from 'ant-design-vue'
 
+const defaultConv: SearchSelectConv<any> = { value: v => v.value, text: v => v.text }
+
 export default defineComponent({
   components: {
     ASelect
@@ -35,7 +37,7 @@ export default defineComponent({
     /**
      * 配置如何将选项转换成显示的文本，值，键
      */
-    conv: customPropType<SearchSelectConv<any>>(),
+    conv: customPropType(() => defaultConv),
     /**
      * 需要多选加上这个
      */

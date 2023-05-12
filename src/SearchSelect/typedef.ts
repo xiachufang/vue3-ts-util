@@ -1,6 +1,6 @@
 import type { VNode } from 'vue'
 
-type StrOrNum = string | number
+export type StrOrNum = string | number
 
 export type SearchSelectConv<T> = {
   /**

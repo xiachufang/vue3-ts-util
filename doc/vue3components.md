@@ -5,6 +5,7 @@
 - [SearchSelect 支持搜索的选择，追求尽可能少的代码来描述](#searchselect-支持搜索的选择追求尽可能少的代码来描述)
   - [props](#props-1)
   - [例子](#例子-1)
+
 desc: 本库的vue3组件
 
 记得先全局导入，或者单独导入
@@ -46,7 +47,7 @@ border: bool 一个浅灰色的框用来区分视图，默认关闭
 ![iShot2022-07-14 17 32 11](https://user-images.githubusercontent.com/25872019/178951654-a1258dac-3084-43bd-bed7-c093c6749935.gif)
 ## props
 options 选项数组
-conv 定义如何从选项数组转换到值以及选项的文本，key回填时显示的文本,具体见SearchSelectConv
+conv 定义如何从选项数组转换到值以及选项的文本，key回填时显示的文本,具体见SearchSelectConv。可以不传默认 `{ value: v => v.value, text: v => v.text }`
 value v-model的值，如果为多选类型则为array，否则是conv.value的返回类型
 mode 模式 多选的话multipie，单选不需要写
 asNullValues 可以看做是空值的列表, 默认0和空字符串，即传入0和空字符串时会把他当成是null来对待，而显示placeholder

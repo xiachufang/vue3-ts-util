@@ -3,9 +3,17 @@ import { computed } from 'vue'
 import { Ref } from '../readonly'
 // todo 编译完类型全部丢失
 export { default as SearchSelect } from './index.vue'
-import { OptionFragment, Props } from './typedef'
+import { OptionFragment, Props, StrOrNum } from './typedef'
+import { isNil } from 'lodash-commonjs-es'
 export * from './typedef'
 
+const check = (val: StrOrNum, op: any, idx: number, field: string) => {
+  if (isNil(val)) {
+    console.error({ op, idx, field, val })
+    throw new Error(`Conversion error, result is null or undefined, field: ${field}, index: ${idx}.`)
+  }
+  return val
+}
 export const useOptionsComputed = (props: Props, searchTarget: Ref<string>) => {
   const currOptions = computed(() => {
     const { options, conv } = props
@@ -14,10 +22,10 @@ export const useOptionsComputed = (props: Props, searchTarget: Ref<string>) => {
     if (!searchTarget.value) {
       return options.map<OptionFragment>((op, idx) => ({
         src: op,
-        key: key(op, idx),
-        label: optionText(op).toString(),
-        title: conv.text(op).toString(),
-        value: conv.value(op)
+        key: check(key(op, idx), op, idx, 'key'),
+        label: check(optionText(op), op, idx, 'label').toString(),
+        title: check(conv.text(op), op, idx, 'title').toString(),
+        value: check(conv.value(op), op, idx, 'value')
       }))
     }
     return options
