@@ -9,17 +9,18 @@ declare const _default: import("vue").DefineComponent<{
         }>>;
         required: true;
     };
-}, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<{
-    option?: unknown;
-} & {
-    option: import("..").DeepReadonly<{
-        onChange: (page: number) => Promise<void>;
-        total: number;
-        pageSize: number;
-        curr: number;
-        setCurr: (v: number) => void;
-    }>;
-} & {}>, {}>;
+}, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
+    option: {
+        type: import("vue").PropType<import("..").DeepReadonly<{
+            onChange: (page: number) => Promise<void>;
+            total: number;
+            pageSize: number;
+            curr: number;
+            setCurr: (v: number) => void;
+        }>>;
+        required: true;
+    };
+}>>, {}>;
 /**
  * @example
  * ```tsx
