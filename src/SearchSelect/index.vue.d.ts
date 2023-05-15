@@ -15,8 +15,7 @@ declare const _default: import("vue").DefineComponent<{
      * 配置如何将选项转换成显示的文本，值，键
      */
     conv: {
-        type: import("vue").PropType<SearchSelectConv<any>>;
-        required: true;
+        default: SearchSelectConv<any>;
     };
     /**
      * 需要多选加上这个
@@ -36,7 +35,7 @@ declare const _default: import("vue").DefineComponent<{
     onSearch: (target: string) => void;
     selected: import("vue").WritableComputedRef<unknown>;
     searchTarget: import("vue").Ref<string>;
-}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, Record<string, any>, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<{
+}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, "update:value"[], "update:value", import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<{
     value?: unknown;
     options?: unknown;
     conv?: unknown;
@@ -50,6 +49,7 @@ declare const _default: import("vue").DefineComponent<{
 } & {
     mode?: "multiple" | undefined;
 }>, {
+    conv: SearchSelectConv<any>;
     asNullValues: any[];
 }>;
 export default _default;
