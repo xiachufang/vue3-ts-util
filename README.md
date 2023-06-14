@@ -82,6 +82,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
     - [解决方法](./doc/other.md#解决方法)
 - [deepComputedEffect 更好的deepComputed](./doc/other.md#deepcomputedeffect-更好的deepcomputed)
 - [deepComputedPick 执行后二值之间仍然会双向同步的pick](./doc/other.md#deepcomputedpick-执行后二值之间仍然会双向同步的pick)
+- [deepProxy让defineModel也能进行深度响应](./doc/other.md#deepproxy让definemodel也能进行深度响应)
 - [events/typedEventEmitter 类型安全的EventEmitter](./doc/other.md#eventstypedeventemitter-类型安全的eventemitter)
 - [image/getImageUrl 从下厨房用的图像结构构造url](./doc/other.md#imagegetimageurl-从下厨房用的图像结构构造url)
 - [assigIncrId 生成一个全局自增id](./doc/other.md#assigincrid-生成一个全局自增id)

@@ -8,6 +8,7 @@
     - [解决方法](#解决方法)
 - [deepComputedEffect 更好的deepComputed](#deepcomputedeffect-更好的deepcomputed)
 - [deepComputedPick 执行后二值之间仍然会双向同步的pick](#deepcomputedpick-执行后二值之间仍然会双向同步的pick)
+- [deepProxy让defineModel也能进行深度响应](#deepproxy让definemodel也能进行深度响应)
 - [events/typedEventEmitter 类型安全的EventEmitter](#eventstypedeventemitter-类型安全的eventemitter)
 - [image/getImageUrl 从下厨房用的图像结构构造url](#imagegetimageurl-从下厨房用的图像结构构造url)
 - [assigIncrId 生成一个全局自增id](#assigincrid-生成一个全局自增id)
@@ -100,6 +101,15 @@ const model = ref({ a: 1, b: 2, c: 3 })
 const picked = deepComputedPick(model, ['a', 'b'])
 ```
 
+# deepProxy让defineModel也能进行深度响应
+```ts
+const _expr = defineModel()
+const expr = deepProxy(_expr) // 然后只用这个
+```
+等价于
+```ts
+defineModel({ deep: true }) // 但是这个vue官方没实现
+```
 # events/typedEventEmitter 类型安全的EventEmitter
 用法和node 的EventEmitter一样，不过新增了类型检查和hook风格管理的监听 useEventListen
 类型声明参考EventEmitter3
