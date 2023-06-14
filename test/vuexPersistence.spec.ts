@@ -1,4 +1,4 @@
-import moment from 'dayjs'
+import dayjs from 'dayjs'
 import { Store } from 'vuex'
 
 import { ActionType, delay, VuexPersistence } from '../src'
@@ -61,7 +61,7 @@ describe('VuexPersistence', () => {
     {
       const { store } = createEnv({
         type: 'setI',
-        expire: moment.duration(300, 'ms'),
+        expire: dayjs.duration(300, 'ms'),
       })
       expect(store.state.i).toBe(0)
       store.commit('setI', 1)  // 300ms内若不再更新会删除如果再次被读取
@@ -71,7 +71,7 @@ describe('VuexPersistence', () => {
     {
       const { store } = createEnv({
         type: 'setI',
-        expire: moment.duration(300, 'ms'),
+        expire: dayjs.duration(300, 'ms'),
       })
       expect(store.state.i).toBe(1)
     }
@@ -79,7 +79,7 @@ describe('VuexPersistence', () => {
     {
       const { store } = createEnv({
         type: 'setI',
-        expire: moment.duration(300, 'ms'),
+        expire: dayjs.duration(300, 'ms'),
       })
       expect(store.state.i).toBe(0)
     }

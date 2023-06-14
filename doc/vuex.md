@@ -64,7 +64,7 @@ export const store = createStore({
     'app/setSu', // 最简单的用法，不过期，使用json进行序列化和反序列化，名字会帮你推出来
     { // 需要自定义可以用object的选项来替代上面的那个
       type: 'app/setSu', // type是必要的，其他的是可选的
-      expire: moment.duration(1, 'h'), // 下次打开页面时如果距离上次修改超过一小时会删除
+      expire: dayjs.duration(1, 'h'), // 下次打开页面时如果距离上次修改超过一小时会删除
       serialize: v => v ? '1' : '', // 自定义序列化方法
       deserialize: str => !!str
     }

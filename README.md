@@ -89,7 +89,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 - [delay,delayFn 延时，推迟控制流执行](./doc/other.md#delaydelayfn-延时推迟控制流执行)
 - [promise2ref promise转成ref](./doc/other.md#promise2ref-promise转成ref)
 - [promiseSetRef 在promise完成时设置某个ref](./doc/other.md#promisesetref-在promise完成时设置某个ref)
-- [momentConvert 一个函数实现下厨房常用的多种时间转换](./doc/other.md#momentconvert-一个函数实现下厨房常用的多种时间转换)
+- [dayjsConvert 一个函数实现下厨房常用的多种时间转换](./doc/other.md#dayjsconvert-一个函数实现下厨房常用的多种时间转换)
 
 ##  类型及类型推导辅助相关
 - [globalComponents](./doc/type.md#globalcomponents)

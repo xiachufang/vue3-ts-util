@@ -15,7 +15,7 @@
 - [delay,delayFn 延时，推迟控制流执行](#delaydelayfn-延时推迟控制流执行)
 - [promise2ref promise转成ref](#promise2ref-promise转成ref)
 - [promiseSetRef 在promise完成时设置某个ref](#promisesetref-在promise完成时设置某个ref)
-- [momentConvert 一个函数实现下厨房常用的多种时间转换](#momentconvert-一个函数实现下厨房常用的多种时间转换)
+- [dayjsConvert 一个函数实现下厨房常用的多种时间转换](#dayjsconvert-一个函数实现下厨房常用的多种时间转换)
 
 desc: 其余不好分类的函数
 # deepComputed
@@ -162,5 +162,5 @@ doSomething() // 延迟300ms执行
 
 # promise2ref promise转成ref
 # promiseSetRef 在promise完成时设置某个ref
-# momentConvert 一个函数实现下厨房常用的多种时间转换
-使用方法见单元测试momentConvert部分
+# dayjsConvert 一个函数实现下厨房常用的多种时间转换
+使用方法见单元测试dayjsConvert部分

@@ -3,7 +3,7 @@ import path from 'path'
 import * as fs from 'fs'
 import * as rollup from 'rollup'
 import { execSync } from 'child_process'
-import { momentConvert } from '../src/momentConvert'
+import { dayjsConvert } from '../src/dayjsConvert'
 
 
 interface DevWatchConf {
@@ -39,7 +39,7 @@ export const devWatch = async () => {
             }
           }
         }
-        console.log(momentConvert(momentConvert()), e.code)
+        console.log(dayjsConvert(dayjsConvert()), e.code)
       })
 
     }
