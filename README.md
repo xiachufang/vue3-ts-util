@@ -82,6 +82,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
     - [解决方法](./doc/other.md#解决方法)
 - [deepComputedEffect 更好的deepComputed](./doc/other.md#deepcomputedeffect-更好的deepcomputed)
 - [deepComputedPick 执行后二值之间仍然会双向同步的pick](./doc/other.md#deepcomputedpick-执行后二值之间仍然会双向同步的pick)
+- [deepProxy让defineModel也能进行深度响应](./doc/other.md#deepproxy让definemodel也能进行深度响应)
 - [events/typedEventEmitter 类型安全的EventEmitter](./doc/other.md#eventstypedeventemitter-类型安全的eventemitter)
 - [image/getImageUrl 从下厨房用的图像结构构造url](./doc/other.md#imagegetimageurl-从下厨房用的图像结构构造url)
 - [assigIncrId 生成一个全局自增id](./doc/other.md#assigincrid-生成一个全局自增id)
@@ -89,7 +90,7 @@ vue3-ts-util是下厨房几个vue3后台的通用函数，组件库。
 - [delay,delayFn 延时，推迟控制流执行](./doc/other.md#delaydelayfn-延时推迟控制流执行)
 - [promise2ref promise转成ref](./doc/other.md#promise2ref-promise转成ref)
 - [promiseSetRef 在promise完成时设置某个ref](./doc/other.md#promisesetref-在promise完成时设置某个ref)
-- [momentConvert 一个函数实现下厨房常用的多种时间转换](./doc/other.md#momentconvert-一个函数实现下厨房常用的多种时间转换)
+- [dayjsConvert 一个函数实现下厨房常用的多种时间转换](./doc/other.md#dayjsconvert-一个函数实现下厨房常用的多种时间转换)
 
 ##  类型及类型推导辅助相关
 - [globalComponents](./doc/type.md#globalcomponents)

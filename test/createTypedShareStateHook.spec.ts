@@ -1,5 +1,5 @@
 import { createApp, defineComponent, h } from 'vue'
-import { createTypedShareStateHook, momentConvert } from '../src'
+import { createTypedShareStateHook, dayjsConvert } from '../src'
 
 const { useHookShareState } = createTypedShareStateHook(() => ({
   count: 0

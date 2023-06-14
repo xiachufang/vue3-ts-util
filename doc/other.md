@@ -8,6 +8,7 @@
     - [解决方法](#解决方法)
 - [deepComputedEffect 更好的deepComputed](#deepcomputedeffect-更好的deepcomputed)
 - [deepComputedPick 执行后二值之间仍然会双向同步的pick](#deepcomputedpick-执行后二值之间仍然会双向同步的pick)
+- [deepProxy让defineModel也能进行深度响应](#deepproxy让definemodel也能进行深度响应)
 - [events/typedEventEmitter 类型安全的EventEmitter](#eventstypedeventemitter-类型安全的eventemitter)
 - [image/getImageUrl 从下厨房用的图像结构构造url](#imagegetimageurl-从下厨房用的图像结构构造url)
 - [assigIncrId 生成一个全局自增id](#assigincrid-生成一个全局自增id)
@@ -15,7 +16,7 @@
 - [delay,delayFn 延时，推迟控制流执行](#delaydelayfn-延时推迟控制流执行)
 - [promise2ref promise转成ref](#promise2ref-promise转成ref)
 - [promiseSetRef 在promise完成时设置某个ref](#promisesetref-在promise完成时设置某个ref)
-- [momentConvert 一个函数实现下厨房常用的多种时间转换](#momentconvert-一个函数实现下厨房常用的多种时间转换)
+- [dayjsConvert 一个函数实现下厨房常用的多种时间转换](#dayjsconvert-一个函数实现下厨房常用的多种时间转换)
 
 desc: 其余不好分类的函数
 # deepComputed
@@ -100,6 +101,15 @@ const model = ref({ a: 1, b: 2, c: 3 })
 const picked = deepComputedPick(model, ['a', 'b'])
 ```
 
+# deepProxy让defineModel也能进行深度响应
+```ts
+const _expr = defineModel()
+const expr = deepProxy(_expr) // 然后只用这个
+```
+等价于
+```ts
+defineModel({ deep: true }) // 但是这个vue官方没实现
+```
 # events/typedEventEmitter 类型安全的EventEmitter
 用法和node 的EventEmitter一样，不过新增了类型检查和hook风格管理的监听 useEventListen
 类型声明参考EventEmitter3
@@ -162,5 +172,5 @@ doSomething() // 延迟300ms执行
 
 # promise2ref promise转成ref
 # promiseSetRef 在promise完成时设置某个ref
-# momentConvert 一个函数实现下厨房常用的多种时间转换
-使用方法见单元测试momentConvert部分
+# dayjsConvert 一个函数实现下厨房常用的多种时间转换
+使用方法见单元测试dayjsConvert部分

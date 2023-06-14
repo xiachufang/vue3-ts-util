@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-util",
-  "version": "1.0.4",
+  "version": "2.1.2",
   "main": "dist/index.js",
   "module": "es/src/index.js",
   "types": "es/index.d.ts",
@@ -51,7 +51,7 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
-    "dayjs": "^1.11.7",
+    "dayjs": "^1.11.8",
     "eventemitter3": "^5.0.0",
     "lodash-commonjs-es": "^1.0.5",
     "ramda": "^0.27.1"
