@@ -2,13 +2,15 @@ import { ColumnProps } from 'ant-design-vue/lib/table/interface'
 import type { ActionContext } from 'vuex'
 import type { Obj, Fn, ActionContextInfer } from 'vuex-dispatch-infer'
 
-export type Columns<T> = (Omit<ColumnProps, 'customRender'> & {
+
+export type ColItem<T = any> = (Omit<ColumnProps, 'customRender'> & {
   customRender?: (a: { record: T }) => any
-  dataIndex?: keyof T,
+  dataIndex?: (keyof T) | string[],
   slots?: {
     customRender: string
   }
-})[]
+})
+export type Columns<T> = ColItem<T>[]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionInfer<State, Commit extends Obj<Fn>> = ActionContext<State, any> & ActionContextInfer<Commit>
