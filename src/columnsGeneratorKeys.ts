@@ -8,7 +8,7 @@ export const generateKey = <T extends ColumnProps>(col: T): T => {
   return col.key ? col : {
     key: col.slots
       ? `_s_${col.slots.customRender}`
-      : `_${(col.dataIndex || col.title)}_`,
+      : `_${(JSON.stringify(col.dataIndex) || col.title)}_`,
       ...col,
   }
 }
